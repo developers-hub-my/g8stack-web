@@ -1,0 +1,31 @@
+---
+import Container from "./ui/Container.astro";
+import SectionHeading from "./ui/SectionHeading.astro";
+import UseCaseCard from "./UseCaseCard.astro";
+import { usecases } from "../data/usecases";
+---
+
+<section id="use-cases" class="py-24 lg:py-32">
+  <Container>
+    <SectionHeading
+      label="Use Cases"
+      title='Built for teams that <span class="text-gradient">take APIs seriously</span>'
+      description="Whether you're managing 5 APIs or 500, G8Stack scales with your organization."
+    />
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {
+        usecases.map((usecase, i) => (
+          <UseCaseCard
+            icon={usecase.icon}
+            title={usecase.title}
+            audience={usecase.audience}
+            description={usecase.description}
+            benefits={usecase.benefits}
+            delay={i * 100}
+          />
+        ))
+      }
+    </div>
+  </Container>
+</section>

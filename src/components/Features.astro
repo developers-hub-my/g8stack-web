@@ -1,0 +1,29 @@
+---
+import Container from "./ui/Container.astro";
+import SectionHeading from "./ui/SectionHeading.astro";
+import FeatureCard from "./FeatureCard.astro";
+import { features } from "../data/features";
+---
+
+<section id="features" class="py-24 lg:py-32">
+  <Container>
+    <SectionHeading
+      label="Features"
+      title='Everything you need to <span class="text-gradient">manage your APIs</span>'
+      description="G8Stack provides a comprehensive web interface for every aspect of API gateway management."
+    />
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {
+        features.map((feature, i) => (
+          <FeatureCard
+            icon={feature.icon}
+            title={feature.title}
+            description={feature.description}
+            delay={i * 50}
+          />
+        ))
+      }
+    </div>
+  </Container>
+</section>

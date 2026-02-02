@@ -1,0 +1,94 @@
+---
+import Container from "./ui/Container.astro";
+import Badge from "./ui/Badge.astro";
+import Button from "./ui/Button.astro";
+---
+
+<section class="relative pt-32 pb-20 lg:pt-44 lg:pb-32 overflow-hidden">
+  <!-- Background effects -->
+  <div class="absolute inset-0 pointer-events-none">
+    <!-- Gradient orbs -->
+    <div
+      class="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-float"
+    >
+    </div>
+    <div
+      class="absolute bottom-1/4 right-1/4 w-80 h-80 bg-violet-500/10 rounded-full blur-3xl animate-float-delayed"
+    >
+    </div>
+    <!-- Radial gradient overlay -->
+    <div
+      class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(59,130,246,0.08),transparent_70%)]"
+    >
+    </div>
+  </div>
+
+  <Container class="relative">
+    <div class="max-w-4xl mx-auto text-center">
+      <div data-aos="fade-up">
+        <Badge class="mb-6">Now available for enterprise teams</Badge>
+      </div>
+
+      <h1
+        class="text-4xl sm:text-5xl lg:text-7xl font-extrabold text-white tracking-tight mb-6"
+        data-aos="fade-up"
+        data-aos-delay="100"
+      >
+        Manage Your API Gateway
+        <span class="text-gradient block mt-2">Without the CLI</span>
+      </h1>
+
+      <p
+        class="text-lg sm:text-xl text-slate-400 max-w-2xl mx-auto mb-10"
+        data-aos="fade-up"
+        data-aos-delay="200"
+      >
+        G8Stack gives your team a powerful web UI to manage subscriptions, API
+        keys, rate limiting, approval workflows, and analytics for your API
+        gateway.
+      </p>
+
+      <div
+        class="flex flex-col sm:flex-row items-center justify-center gap-4"
+        data-aos="fade-up"
+        data-aos-delay="300"
+      >
+        <Button href="#pricing" variant="primary" size="lg">
+          Request a Demo
+          <svg
+            class="w-4 h-4 ml-2"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+          </svg>
+        </Button>
+        <Button href="#features" variant="secondary" size="lg">
+          Explore Features
+        </Button>
+      </div>
+
+      <!-- Tech badges -->
+      <div
+        class="flex flex-wrap items-center justify-center gap-3 mt-12"
+        data-aos="fade-up"
+        data-aos-delay="400"
+      >
+        {
+          ["PostgreSQL", "Elasticsearch", "Laravel", "Filament", "REST API"].map(
+            (tech) => (
+              <span class="px-3 py-1.5 rounded-full text-xs font-mono text-slate-500 bg-white/5 border border-white/5">
+                {tech}
+              </span>
+            )
+          )
+        }
+      </div>
+    </div>
+  </Container>
+</section>

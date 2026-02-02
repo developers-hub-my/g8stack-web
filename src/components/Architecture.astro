@@ -1,0 +1,113 @@
+---
+import Container from "./ui/Container.astro";
+import SectionHeading from "./ui/SectionHeading.astro";
+
+const layers = [
+  {
+    label: "Management Layer",
+    items: [
+      { name: "G8Stack", sub: "Web UI", highlight: true },
+    ],
+  },
+  {
+    label: "Gateway Layer",
+    items: [
+      { name: "API Gateway", sub: "Traffic Management" },
+    ],
+  },
+  {
+    label: "Data & Observability",
+    items: [
+      { name: "PostgreSQL", sub: "Database" },
+      { name: "Elasticsearch", sub: "Search & Logs" },
+      { name: "Kibana", sub: "Dashboards" },
+    ],
+  },
+  {
+    label: "Your APIs",
+    items: [
+      { name: "Microservice A", sub: "Upstream" },
+      { name: "Microservice B", sub: "Upstream" },
+      { name: "Microservice C", sub: "Upstream" },
+    ],
+  },
+];
+---
+
+<section id="architecture" class="py-24 lg:py-32 relative">
+  <div
+    class="absolute inset-0 bg-gradient-to-b from-transparent via-violet-500/[0.02] to-transparent pointer-events-none"
+  >
+  </div>
+
+  <Container class="relative">
+    <SectionHeading
+      label="Architecture"
+      title='How G8Stack fits into <span class="text-gradient">your stack</span>'
+      description="G8Stack sits on top of your API gateway, providing a management layer without interfering with your traffic flow."
+    />
+
+    <div class="max-w-3xl mx-auto space-y-6" data-aos="fade-up">
+      {
+        layers.map((layer, layerIdx) => (
+          <div>
+            <!-- Layer label -->
+            <p class="text-xs font-mono text-slate-500 uppercase tracking-wider mb-3 text-center">
+              {layer.label}
+            </p>
+
+            <!-- Items -->
+            <div
+              class:list={[
+                "grid gap-4",
+                layer.items.length === 1
+                  ? "grid-cols-1 max-w-sm mx-auto"
+                  : `grid-cols-1 sm:grid-cols-${layer.items.length}`,
+              ]}
+            >
+              {layer.items.map((item) => (
+                <div
+                  class:list={[
+                    "rounded-xl p-5 text-center border transition-colors",
+                    item.highlight
+                      ? "bg-gradient-to-br from-blue-500/10 to-violet-500/10 border-blue-500/30"
+                      : "bg-navy-800/50 border-white/5 hover:border-white/10",
+                  ]}
+                >
+                  <p
+                    class:list={[
+                      "font-semibold text-sm",
+                      item.highlight ? "text-blue-400" : "text-white",
+                    ]}
+                  >
+                    {item.name}
+                  </p>
+                  <p class="text-xs text-slate-500 mt-1">{item.sub}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Connector arrow */}
+            {layerIdx < layers.length - 1 && (
+              <div class="flex justify-center py-3">
+                <svg
+                  class="w-6 h-6 text-slate-600"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M19 14l-7 7m0 0l-7-7m7 7V3"
+                  />
+                </svg>
+              </div>
+            )}
+          </div>
+        ))
+      }
+    </div>
+  </Container>
+</section>

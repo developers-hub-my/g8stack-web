@@ -1,0 +1,37 @@
+---
+import Container from "./ui/Container.astro";
+---
+
+<section class="py-24 lg:py-32">
+  <Container>
+    <div class="max-w-5xl mx-auto" data-aos="fade-up">
+      <!-- Screenshot with gradient border and glow -->
+      <div class="relative rounded-xl overflow-hidden gradient-border glow-blue">
+        <div class="rounded-xl overflow-hidden bg-navy-900">
+          <!-- Browser chrome mockup -->
+          <div class="flex items-center gap-2 px-4 py-3 bg-navy-800 border-b border-white/5">
+            <div class="flex gap-1.5">
+              <div class="w-3 h-3 rounded-full bg-red-500/60"></div>
+              <div class="w-3 h-3 rounded-full bg-yellow-500/60"></div>
+              <div class="w-3 h-3 rounded-full bg-green-500/60"></div>
+            </div>
+            <div class="flex-1 mx-4">
+              <div
+                class="bg-navy-950 rounded-md px-3 py-1.5 text-xs text-slate-500 font-mono text-center"
+              >
+                g8stack.local/dashboard
+              </div>
+            </div>
+          </div>
+          <!-- Dashboard screenshot -->
+          <img
+            src="/images/dashboard.png"
+            alt="G8Stack Dashboard — API Gateway management interface showing sync status, API statistics, and navigation"
+            class="w-full"
+            loading="lazy"
+          />
+        </div>
+      </div>
+    </div>
+  </Container>
+</section>

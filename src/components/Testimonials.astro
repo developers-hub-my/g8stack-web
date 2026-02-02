@@ -1,0 +1,31 @@
+---
+import Container from "./ui/Container.astro";
+import SectionHeading from "./ui/SectionHeading.astro";
+import TestimonialCard from "./TestimonialCard.astro";
+import { testimonials } from "../data/testimonials";
+---
+
+<section class="py-24 lg:py-32">
+  <Container>
+    <SectionHeading
+      label="Testimonials"
+      title='Loved by <span class="text-gradient">engineering teams</span>'
+      description="See what teams building with G8Stack have to say."
+    />
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {
+        testimonials.map((t, i) => (
+          <TestimonialCard
+            quote={t.quote}
+            author={t.author}
+            role={t.role}
+            company={t.company}
+            avatar={t.avatar}
+            delay={i * 100}
+          />
+        ))
+      }
+    </div>
+  </Container>
+</section>

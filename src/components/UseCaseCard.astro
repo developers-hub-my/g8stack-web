@@ -1,0 +1,48 @@
+---
+interface Props {
+  icon: string;
+  title: string;
+  audience: string;
+  description: string;
+  benefits: string[];
+  delay?: number;
+}
+
+const { title, audience, description, benefits, delay = 0 } = Astro.props;
+---
+
+<div
+  class="glass-card rounded-xl p-6 lg:p-8 transition-all duration-300 hover:translate-y-[-2px]"
+  data-aos="fade-up"
+  data-aos-delay={delay}
+>
+  <span
+    class="inline-block px-2.5 py-1 text-xs font-medium text-violet-400 bg-violet-500/10 rounded-md border border-violet-500/20 mb-4"
+  >
+    {audience}
+  </span>
+  <h3 class="text-xl font-semibold text-white mb-3">{title}</h3>
+  <p class="text-sm text-slate-400 leading-relaxed mb-5">{description}</p>
+  <ul class="space-y-2">
+    {
+      benefits.map((benefit) => (
+        <li class="flex items-center gap-2 text-sm text-slate-300">
+          <svg
+            class="w-4 h-4 text-blue-400 shrink-0"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M5 13l4 4L19 7"
+            />
+          </svg>
+          {benefit}
+        </li>
+      ))
+    }
+  </ul>
+</div>
