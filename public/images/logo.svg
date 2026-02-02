@@ -1,0 +1,13 @@
+<svg width="160" height="40" viewBox="0 0 160 40" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g8logo" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#3B82F6"/>
+      <stop offset="1" stop-color="#8B5CF6"/>
+    </linearGradient>
+  </defs>
+  <!-- Icon -->
+  <path d="M17.5 3.06 L13 3.06 L3.06 13 L3.06 27 L13 36.94 L17.5 36.94Z" fill="url(#g8logo)"/>
+  <path d="M22.5 3.06 L27 3.06 L36.94 13 L36.94 27 L27 36.94 L22.5 36.94Z" fill="url(#g8logo)"/>
+  <!-- Text -->
+  <text x="44" y="28" font-family="Inter, system-ui, sans-serif" font-weight="700" font-size="22" fill="white" letter-spacing="-0.5">G8Stack</text>
+</svg>
