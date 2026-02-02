@@ -16,7 +16,14 @@
       "Bash(magick:*)",
       "Bash(gh repo view:*)",
       "Bash(gh api:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "WebSearch",
+      "Bash(npm install:*)",
+      "Bash(npm run build:*)",
+      "Bash(timeout 10 npm run dev:*)",
+      "Bash(git -C /Users/nasrulhazim/Projects/2026/g8stack-web status)",
+      "Bash(git commit:*)",
+      "Bash(git -C /Users/nasrulhazim/Projects/2026/g8stack-web diff .claude/settings.local.json)"
     ]
   }
 }
