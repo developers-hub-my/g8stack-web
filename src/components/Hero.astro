@@ -26,7 +26,7 @@ import Button from "./ui/Button.astro";
   <Container class="relative">
     <div class="max-w-4xl mx-auto text-center">
       <div data-aos="fade-up">
-        <Badge class="mb-6">Now available for enterprise teams</Badge>
+        <Badge class="mb-6">Built for teams that scale</Badge>
       </div>
 
       <h1
@@ -34,8 +34,8 @@ import Button from "./ui/Button.astro";
         data-aos="fade-up"
         data-aos-delay="100"
       >
-        Manage Your API Gateway
-        <span class="text-gradient block mt-2">Without the CLI</span>
+        One Dashboard for Your
+        <span class="text-gradient block mt-2">API Gateway</span>
       </h1>
 
       <p
@@ -43,9 +43,9 @@ import Button from "./ui/Button.astro";
         data-aos="fade-up"
         data-aos-delay="200"
       >
-        G8Stack is the API gateway manager that gives your team a powerful web
-        UI to manage subscriptions, API keys, rate limiting, approval workflows,
-        and analytics — all without the CLI.
+        G8Stack gives your team a visual dashboard to manage API access, monitor
+        traffic, and enforce policies — so everyone can contribute, not just the
+        experts.
       </p>
 
       <div
@@ -54,7 +54,7 @@ import Button from "./ui/Button.astro";
         data-aos-delay="300"
       >
         <Button href="#pricing" variant="primary" size="lg">
-          Request a Demo
+          See It in Action
           <svg
             class="w-4 h-4 ml-2"
             fill="none"
@@ -69,26 +69,10 @@ import Button from "./ui/Button.astro";
           </svg>
         </Button>
         <Button href="#features" variant="secondary" size="lg">
-          Explore Features
+          See What's Included
         </Button>
       </div>
 
-      <!-- Tech badges -->
-      <div
-        class="flex flex-wrap items-center justify-center gap-3 mt-12"
-        data-aos="fade-up"
-        data-aos-delay="400"
-      >
-        {
-          ["PostgreSQL", "Elasticsearch", "Laravel", "Filament", "REST API"].map(
-            (tech) => (
-              <span class="px-3 py-1.5 rounded-full text-xs font-mono text-slate-500 bg-white/5 border border-white/5">
-                {tech}
-              </span>
-            )
-          )
-        }
-      </div>
     </div>
   </Container>
 </section>

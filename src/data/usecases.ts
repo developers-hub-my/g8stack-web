@@ -10,37 +10,37 @@ export const usecases: UseCase[] = [
   {
     icon: "platform",
     title: "API Platform Teams",
-    audience: "Platform Engineers",
+    audience: "Platform & Infrastructure Teams",
     description:
-      "Centralize API gateway operations for your entire organization. G8Stack gives platform teams a single pane of glass to manage services, routes, and policies.",
+      "Give your platform team a single dashboard to manage services, routes, and policies across the entire organization — without juggling config files.",
     benefits: [
       "Self-service API provisioning",
-      "Centralized policy enforcement",
+      "Centralized policy management",
       "Cross-team visibility",
     ],
   },
   {
     icon: "devops",
-    title: "Enterprise DevOps",
-    audience: "DevOps Engineers",
+    title: "Operations Teams",
+    audience: "DevOps & SRE Teams",
     description:
-      "Reduce operational overhead of managing gateway configurations. Replace manual CLI workflows with automated, auditable UI-driven operations.",
+      "Reduce time spent on gateway operations. Replace manual workflows with a visual interface your team can use to manage configurations in minutes.",
     benefits: [
-      "Configuration drift detection",
+      "Instant drift detection",
       "One-click gateway sync",
-      "Rollback capabilities",
+      "Visual change management",
     ],
   },
   {
     icon: "cto",
     title: "Technical Leadership",
-    audience: "CTOs & VPs of Engineering",
+    audience: "CTOs & Engineering Leaders",
     description:
-      "Gain executive-level visibility into your API infrastructure. Monitor adoption, enforce governance, and demonstrate compliance.",
+      "Get executive-level visibility into your API infrastructure. Monitor adoption, enforce governance, and make data-driven decisions about your API strategy.",
     benefits: [
-      "API usage analytics",
-      "Compliance audit trails",
-      "Cost allocation insights",
+      "Real-time usage analytics",
+      "Compliance-ready audit trails",
+      "Team performance insights",
     ],
   },
   {
@@ -48,11 +48,11 @@ export const usecases: UseCase[] = [
     title: "Regulated Industries",
     audience: "Finance, Healthcare, Government",
     description:
-      "Meet strict regulatory requirements with built-in approval workflows, audit logging, and role-based access controls.",
+      "Meet strict regulatory requirements with built-in approval workflows, full audit logging, and granular access controls — out of the box.",
     benefits: [
-      "Multi-step approval workflows",
-      "Complete audit trails",
-      "RBAC & access controls",
+      "Structured approval workflows",
+      "Complete audit trail",
+      "Granular access controls",
     ],
   },
 ];

@@ -7,74 +7,74 @@ export interface Feature {
 export const features: Feature[] = [
   {
     icon: "subscription",
-    title: "Subscription Management",
+    title: "Manage API Access",
     description:
-      "Create and manage API subscription tiers with usage quotas, billing cycles, and automated provisioning for your consumers.",
+      "Create access tiers, set usage limits, and let consumers sign up on their own — all through the dashboard.",
   },
   {
     icon: "key",
-    title: "API Key Management",
+    title: "Keys & Credentials",
     description:
-      "Issue, rotate, and revoke API keys through an intuitive dashboard. Track key usage and set per-key rate limits.",
+      "Issue, rotate, and revoke API keys from one screen. See who's using what and set limits per key.",
   },
   {
     icon: "rateLimit",
-    title: "Rate Limiting",
+    title: "Traffic Protection",
     description:
-      "Configure granular rate limiting policies per route, service, or consumer. Protect your APIs from abuse with visual controls.",
+      "Set up traffic rules in clicks, not config files. Protect your APIs from overuse without touching a terminal.",
   },
   {
     icon: "approval",
-    title: "Approval Workflow",
+    title: "Controlled Access",
     description:
-      "Multi-step approval workflows for API access requests. Assign reviewers, set SLAs, and maintain audit trails.",
+      "Every API access request goes through a structured approval process. Set reviewers, enforce SLAs, and keep a complete paper trail.",
   },
   {
     icon: "docs",
     title: "API Documentation",
     description:
-      "Auto-generate and publish interactive API documentation. Keep your developer portal in sync with your gateway configuration.",
+      "Auto-generate and publish interactive API documentation. Keep your developer portal always up to date with your gateway.",
   },
   {
     icon: "analytics",
-    title: "Analytics & Monitoring",
+    title: "Live Analytics",
     description:
-      "Real-time dashboards for API traffic, latency, error rates, and consumer activity. Powered by Elasticsearch and Kibana.",
+      "See your API traffic, errors, and performance in real time. Spot issues before they become problems.",
   },
   {
     icon: "sync",
-    title: "Gateway Sync",
+    title: "One-Click Sync",
     description:
-      "One-click synchronization with your API gateway. Detect configuration drift and resolve conflicts visually.",
+      "Keep your gateway and dashboard perfectly aligned. Spot changes instantly and fix them in one click.",
   },
   {
     icon: "plugins",
-    title: "Plugin Management",
+    title: "Extend Without Code",
     description:
-      "Browse, configure, and toggle gateway plugins from the UI. No YAML files or CLI commands required.",
+      "Add capabilities to your gateway from a visual marketplace. No config files to write or maintain.",
   },
   {
     icon: "users",
-    title: "Consumer Management",
+    title: "Team & User Management",
     description:
-      "Onboard and manage API consumers with role-based access control, groups, and credential management.",
+      "Invite team members, set permissions, and let consumers self-serve — without bottlenecking your engineers.",
   },
   {
     icon: "routes",
-    title: "Routes & Services",
+    title: "Traffic Routing",
     description:
-      "Visual route configuration with path matching, header routing, and upstream load balancing controls.",
+      "Point traffic where it needs to go with a visual editor. No config files required.",
   },
   {
     icon: "shield",
-    title: "Security Policies",
+    title: "Policy Enforcement",
     description:
-      "Enforce authentication, IP restrictions, CORS, and OAuth2 policies across your API gateway from a single pane.",
+      "Set authentication, access restrictions, and security rules once — enforce them everywhere, automatically.",
   },
   {
     icon: "logs",
-    title: "Audit Logs",
+    title: "Full Audit Trail",
     description:
-      "Complete audit trail of every configuration change, access request, and administrative action across your gateway.",
+      "Know exactly who changed what, when, and why. Meet compliance requirements with automatically generated audit records.",
   },
 ];

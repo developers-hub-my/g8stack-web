@@ -9,7 +9,7 @@ export interface Testimonial {
 export const testimonials: Testimonial[] = [
   {
     quote:
-      "G8Stack transformed how our team manages our API gateway. What used to take hours of CLI work now takes minutes through the dashboard.",
+      "G8Stack transformed how our team manages our API gateway. What used to take hours now takes minutes — saving our team roughly 15 hours a week.",
     author: "Ahmad Rahman",
     role: "Head of Platform Engineering",
     company: "TechCorp Asia",
@@ -17,7 +17,7 @@ export const testimonials: Testimonial[] = [
   },
   {
     quote:
-      "The approval workflows and audit logging were exactly what we needed for our compliance requirements. Deployment to production is now fully governed.",
+      "Before G8Stack, we couldn't prove who changed what in our gateway. Now every action is logged automatically, and our compliance team finally has the audit trail they need.",
     author: "Sarah Chen",
     role: "VP of Engineering",
     company: "FinanceHub",
@@ -25,7 +25,7 @@ export const testimonials: Testimonial[] = [
   },
   {
     quote:
-      "We went from managing gateway configs across 12 microservices via YAML files to a single, unified dashboard. Our developers love it.",
+      "We went from a handful of engineers who could touch the gateway to our entire team contributing. G8Stack made API management accessible to everyone.",
     author: "Marcus Liu",
     role: "DevOps Lead",
     company: "CloudScale Solutions",
