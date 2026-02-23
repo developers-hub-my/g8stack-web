@@ -1,0 +1,22 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Container from "../components/ui/Container.astro";
+import Button from "../components/ui/Button.astro";
+---
+
+<BaseLayout title="Page Not Found — G8Stack" description="The page you're looking for doesn't exist.">
+  <Container>
+    <div class="min-h-screen flex items-center justify-center">
+      <div class="text-center max-w-md">
+        <p class="text-7xl font-extrabold text-gradient mb-4">404</p>
+        <h1 class="text-2xl font-bold text-white mb-4">Page not found</h1>
+        <p class="text-slate-400 mb-8">
+          The page you're looking for doesn't exist or has been moved.
+        </p>
+        <Button href="/" variant="primary" size="lg">
+          Back to Home
+        </Button>
+      </div>
+    </div>
+  </Container>
+</BaseLayout>

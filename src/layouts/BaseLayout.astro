@@ -5,7 +5,7 @@ interface Props {
 }
 
 const {
-  title = "G8Stack — The Dashboard for Your API Gateway",
+  title = "G8Stack — API Management Made Simple",
   description = "G8Stack gives your team a visual dashboard to manage API access, monitor traffic, and enforce policies — so everyone can contribute, not just the experts.",
 } = Astro.props;
 
@@ -23,6 +23,9 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <!-- Canonical -->
     <link rel="canonical" href={canonicalURL} />
 
+    <!-- Robots -->
+    <meta name="robots" content="index, follow" />
+
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
@@ -34,12 +37,53 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={new URL("/og-image.png", Astro.site)} />
+    <meta property="og:site_name" content="G8Stack" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@g8stack" />
+    <meta name="twitter:creator" content="@g8stack" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={new URL("/og-image.png", Astro.site)} />
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "G8Stack",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "description": description,
+      "url": "https://g8stack.com",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "description": "Custom enterprise pricing — contact for a quote"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Developers Hub Sdn Bhd",
+        "url": "https://devhub.my",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://g8stack.com/images/logo.svg"
+        }
+      }
+    })} />
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "G8Stack",
+      "url": "https://g8stack.com",
+      "logo": "https://g8stack.com/images/logo.svg",
+      "parentOrganization": {
+        "@type": "Organization",
+        "name": "Developers Hub Sdn Bhd",
+        "url": "https://devhub.my"
+      }
+    })} />
 
     <title>{title}</title>
   </head>
