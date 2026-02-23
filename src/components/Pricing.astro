@@ -3,15 +3,27 @@ import Container from "./ui/Container.astro";
 import SectionHeading from "./ui/SectionHeading.astro";
 import Button from "./ui/Button.astro";
 
-const features = [
-  "Unlimited API routes & services",
-  "Full gateway management dashboard",
-  "API access & credential management",
+const proFeatures = [
+  "Full G8Stack platform — zero feature gating",
+  "API Gateway setup & configuration",
   "Approval workflows & audit trail",
+  "API access & credential management",
   "Live analytics & monitoring",
   "Team permissions & access control",
-  "Search & log analytics integration",
-  "Dedicated support & onboarding",
+  "1-day hands-on training",
+  "Documentation & knowledge transfer",
+  "1-week go-live support",
+  "Year 1 support & patches included",
+];
+
+const apexAddOns = [
+  "Extended training (3–5 days)",
+  "UI / Workflow / Plugin customisation",
+  "SSO integration",
+  "Advanced monitoring & observability",
+  "Disaster recovery setup",
+  "Security hardening review",
+  "Compliance documentation",
 ];
 ---
 
@@ -24,30 +36,27 @@ const features = [
   <Container class="relative">
     <SectionHeading
       label="Pricing"
-      title='One platform for your entire team'
-      description="From engineers to managers — one dashboard to manage, monitor, and govern your API gateway."
+      title='One platform, two tiers'
+      description="Perpetual licence. On-premise. Full source code. No per-user, per-node, or recurring fees."
     />
 
-    <div class="max-w-lg mx-auto" data-aos="fade-up">
-      <div
-        class="glass-card rounded-2xl p-8 lg:p-10 text-center glow-blue"
-      >
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-4xl mx-auto" data-aos="fade-up">
+      <!-- Pro -->
+      <div class="glass-card rounded-2xl p-8 lg:p-10 flex flex-col">
         <span
-          class="inline-block px-3 py-1 text-xs font-medium text-blue-400 bg-blue-500/10 rounded-full border border-blue-500/20 mb-6"
+          class="inline-block self-start px-3 py-1 text-xs font-medium text-blue-400 bg-blue-500/10 rounded-full border border-blue-500/20 mb-6"
         >
-          On-Premise
+          Pro
         </span>
-        <h3 class="text-3xl font-bold text-white mb-2">Enterprise Licensing</h3>
-        <p class="text-slate-500 text-sm mb-8">
-          Starting from five figures, deployed entirely within your infrastructure. Final pricing depends on your deployment package and scale.
-        </p>
+        <h3 class="text-2xl font-bold text-white mb-1">Production-Grade</h3>
+        <p class="text-slate-400 text-sm mb-8">Go live fast. Full platform with everything your team needs to run your API gateway in production.</p>
 
-        <ul class="space-y-3 text-left mb-8">
+        <ul class="space-y-3 text-left mb-8 flex-1">
           {
-            features.map((feature) => (
-              <li class="flex items-center gap-3 text-sm text-slate-300">
+            proFeatures.map((feature) => (
+              <li class="flex items-start gap-3 text-sm text-slate-300">
                 <svg
-                  class="w-5 h-5 text-blue-400 shrink-0"
+                  class="w-5 h-5 text-blue-400 shrink-0 mt-0.5"
                   fill="none"
                   stroke="currentColor"
                   stroke-width="2"
@@ -65,13 +74,81 @@ const features = [
           }
         </ul>
 
-        <Button href="mailto:hello@devhub.my" variant="primary" size="lg" class="w-full">
-          Contact Us for Pricing
+        <Button href="mailto:hello@devhub.my?subject=G8Stack%20Pro%20%E2%80%94%20Quote%20Request&body=Hi%2C%0A%0AI%E2%80%99m%20interested%20in%20G8Stack%20Pro.%20Could%20you%20share%20pricing%20details%3F%0A%0AOrganisation%3A%20%0AEstimated%20API%20count%3A%20%0ADeployment%20preference%20(VM%20%2F%20Container)%3A%20%0ATimeline%3A%20%0A%0AThank%20you." variant="secondary" size="lg" class="w-full">
+          Get a Quote
         </Button>
-        <p class="text-xs text-slate-500 mt-4">
-          Free consultation included. No commitment required.
-        </p>
       </div>
+
+      <!-- Apex -->
+      <div class="glass-card rounded-2xl p-8 lg:p-10 flex flex-col glow-blue relative">
+        <span
+          class="inline-block self-start px-3 py-1 text-xs font-medium text-violet-400 bg-violet-500/10 rounded-full border border-violet-500/20 mb-6"
+        >
+          Apex
+        </span>
+        <h3 class="text-2xl font-bold text-white mb-1">Mission-Critical</h3>
+        <p class="text-slate-400 text-sm mb-8">Everything in Pro, plus advanced services for high-stakes environments.</p>
+
+        <ul class="space-y-3 text-left mb-8 flex-1">
+          {
+            apexAddOns.map((feature) => (
+              <li class="flex items-start gap-3 text-sm text-slate-300">
+                <svg
+                  class="w-5 h-5 text-violet-400 shrink-0 mt-0.5"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M12 4v16m8-8H4"
+                  />
+                </svg>
+                {feature}
+              </li>
+            ))
+          }
+        </ul>
+
+        <Button href="mailto:hello@devhub.my?subject=G8Stack%20Apex%20%E2%80%94%20Enquiry&body=Hi%2C%0A%0AI%E2%80%99m%20interested%20in%20G8Stack%20Apex%20for%20a%20mission-critical%20deployment.%0A%0AOrganisation%3A%20%0AEstimated%20API%20count%3A%20%0AAdd-ons%20of%20interest%3A%20%0ADeployment%20preference%20(VM%20%2F%20Container)%3A%20%0ATimeline%3A%20%0A%0AThank%20you." variant="primary" size="lg" class="w-full">
+          Talk to Us
+        </Button>
+      </div>
+    </div>
+
+    <!-- Shared details -->
+    <div class="max-w-4xl mx-auto mt-10 text-center" data-aos="fade-up" data-aos-delay="100">
+      <div class="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm text-slate-500">
+        <span class="flex items-center gap-2">
+          <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+          Perpetual licence
+        </span>
+        <span class="flex items-center gap-2">
+          <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+          VM or Container — same price
+        </span>
+        <span class="flex items-center gap-2">
+          <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+          Full source code included
+        </span>
+        <span class="flex items-center gap-2">
+          <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+          Annual renewal from MYR 6,000/year
+        </span>
+      </div>
+      <p class="text-xs text-slate-600 mt-6">
+        All prices exclude SST. Free consultation included — no commitment required.
+      </p>
     </div>
   </Container>
 </section>
