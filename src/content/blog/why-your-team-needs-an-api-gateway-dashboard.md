@@ -32,6 +32,6 @@ A visual API gateway dashboard like G8Stack solves these by giving your entire t
 
 ## Getting started
 
-G8Stack connects to your existing Kong or Apache APISIX gateway and automatically discovers your current setup. Most teams are operational within 30 minutes.
+G8Stack connects to your existing Kong gateway and automatically discovers your current setup. Most teams are operational within 30 minutes.
 
 [See how it works →](/#how-it-works)
