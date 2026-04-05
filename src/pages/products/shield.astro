@@ -1,0 +1,294 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/ui/Container.astro";
+import Button from "@/components/ui/Button.astro";
+import Badge from "@/components/ui/Badge.astro";
+import SectionHeading from "@/components/ui/SectionHeading.astro";
+import Navbar from "@/components/Navbar.astro";
+import Footer from "@/components/Footer.astro";
+import "@/styles/global.css";
+
+const kongCovers = [
+  "Authentication (JWT, OAuth, mTLS, SAML)",
+  "Basic rate limiting & IP restriction",
+  "Regex-based bot detection (user-agent)",
+  "Injection protection (regex SQLi/XSS)",
+  "JSON/XML threat protection (structure/size)",
+  "TLS termination & ACME",
+];
+
+const shieldAdds = [
+  { title: "Threat Intelligence", description: "Real-time threat feeds, IP reputation scoring, and known-attacker databases. Kong's bot detection is just user-agent regex — G8Shield uses fingerprinting and behavioural analysis.", icon: "M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z", color: "bg-rose-500/10 text-rose-400" },
+  { title: "Business Logic Abuse Detection", description: "Correlate request sequences across endpoints and time to detect credential stuffing, account enumeration, scraping, and cart manipulation. Kong only sees individual requests.", icon: "M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5m.75-9l3-3 2.148 2.148A12.061 12.061 0 0116.5 7.605", color: "bg-amber-500/10 text-amber-400" },
+  { title: "Compliance Reporting", description: "Continuously assess API configurations against PCI-DSS, GDPR, and SOC2 frameworks. Generate auditor-ready reports with gap analysis and evidence collection.", icon: "M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25", color: "bg-blue-500/10 text-blue-400" },
+  { title: "Security Posture Scoring", description: "Risk scores per API, per service, and organisation-wide with trend tracking. Know your security posture at a glance, not buried in logs.", icon: "M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z", color: "bg-violet-500/10 text-violet-400" },
+  { title: "Shadow API Discovery", description: "Passively analyse traffic to discover undocumented, forgotten, or unmanaged API endpoints. Kong only knows about routes you explicitly register.", icon: "M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z", color: "bg-blue-500/10 text-blue-400" },
+  { title: "Sensitive Data Monitoring", description: "Scan request and response bodies for PII, tokens, credit cards, and credentials leaking through APIs. Kong's payload protection only checks structure, not content.", icon: "M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178zM15 12a3 3 0 11-6 0 3 3 0 016 0z", color: "bg-amber-500/10 text-amber-400" },
+  { title: "Attack Pattern Analytics", description: "Attack timelines, trend analysis, and forensic investigation tools. Correlate events across services instead of parsing raw logs in Kibana.", icon: "M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z", color: "bg-rose-500/10 text-rose-400" },
+  { title: "Policy Governance", description: "Policy-as-code templates mapped to compliance standards. Automatic enforcement with drift detection and alerts when configs deviate from approved baselines.", icon: "M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z M15 12a3 3 0 11-6 0 3 3 0 016 0z", color: "bg-violet-500/10 text-violet-400" },
+  { title: "SIEM/SOC Integration", description: "Security-enriched events in CEF/LEEF formats with MITRE ATT&CK mapping and alert severity classification. Kong only sends raw operational logs.", icon: "M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244", color: "bg-blue-500/10 text-blue-400" },
+];
+
+const architecture = [
+  { label: "Reads From", color: "border-blue-500/20 bg-blue-500/5", items: ["Kong Admin API", "Elastic Stack", "G8Stack Governance"] },
+  { label: "Analyses", color: "border-violet-500/20 bg-violet-500/5", items: ["Traffic patterns", "Attack sequences", "Compliance gaps", "Data exposure"] },
+  { label: "Acts On", color: "border-rose-500/20 bg-rose-500/5", items: ["Kong plugin configs", "IP blocklists", "Rate limit policies", "Alert channels"] },
+];
+
+const usecases = [
+  { audience: "Security Teams", title: "See What Kong Can't", description: "Kong handles per-request security. G8Shield correlates across requests, endpoints, and time to detect what individual rules miss.", benefits: ["Cross-endpoint attack correlation", "Behavioural anomaly detection", "Forensic investigation tools", "Automated response via Kong Admin API"] },
+  { audience: "Compliance Officers", title: "Prove You're Compliant", description: "Map your API security posture to PCI-DSS, GDPR, and SOC2. Generate reports that auditors actually accept.", benefits: ["Framework-mapped gap analysis", "Continuous compliance monitoring", "Auditor-ready PDF reports", "Policy drift detection with alerts"] },
+  { audience: "Platform Engineers", title: "Discover Shadow APIs", description: "Find the APIs you didn't know existed. Traffic analysis reveals undocumented endpoints, forgotten services, and unmanaged routes.", benefits: ["Passive traffic-based discovery", "Automatic inventory updates", "Risk scoring for unmanaged APIs", "Integration with G8Stack governance"] },
+  { audience: "CISOs & Leadership", title: "One Dashboard, Full Picture", description: "Security posture scoring across your entire API estate. Track risk trends, not just individual incidents.", benefits: ["Organisation-wide risk scores", "Per-API and per-service scoring", "Trend tracking over time", "Executive summary reports"] },
+];
+
+const faq = [
+  { question: "Is G8Shield a Kong plugin?", answer: "No. G8Shield is a standalone application that sits alongside Kong, not inside it. Kong plugins process individual requests — G8Shield needs to correlate across requests, endpoints, and time, which requires its own data store and analysis engine. It communicates with Kong via the Admin API for automated enforcement." },
+  { question: "How does G8Shield get its data?", answer: "G8Shield reads from three sources: Kong Admin API (for API inventory and plugin configurations), your Elastic Stack (for traffic logs and metrics that Kong already sends there via G8Monitor), and G8Stack (for governance policies and approved API specs)." },
+  { question: "Can G8Shield automatically block threats?", answer: "Yes. When G8Shield detects a threat, it can push configurations back to Kong via the Admin API — adding IP restrictions, enabling rate limiting, or adjusting plugin settings. You control which responses are automated and which require manual approval." },
+  { question: "What compliance frameworks does it support?", answer: "G8Shield supports PCI-DSS, GDPR, and SOC2 compliance reporting out of the box. It continuously assesses your API configurations against these frameworks and generates auditor-ready reports with gap analysis and evidence collection." },
+  { question: "Does it replace our existing security tools?", answer: "No. G8Shield complements Kong's built-in security plugins and your existing SIEM/SOC tools. It fills the gaps that Kong doesn't cover — threat intelligence, business logic abuse, compliance reporting, and security posture management — and integrates with your existing stack." },
+  { question: "When will G8Shield be available?", answer: "G8Shield is currently in development. Join the waitlist to be notified when early access is available. Enterprise customers can contact us for priority access and custom integration planning." },
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faq.map((item) => ({
+    "@type": "Question",
+    name: item.question,
+    acceptedAnswer: { "@type": "Answer", text: item.answer },
+  })),
+};
+---
+
+<BaseLayout
+  title="G8Shield — API Security Intelligence & Compliance | G8Stack"
+  description="API security intelligence layer for Kong. Threat detection, compliance reporting, shadow API discovery, and security posture scoring — what Kong doesn't cover."
+>
+  <Navbar />
+  <main>
+
+    {/* ===== Hero ===== */}
+    <section class="relative overflow-hidden pt-32 pb-20 sm:pt-44 sm:pb-32">
+      <Container>
+        <div class="text-center" data-aos="fade-up">
+          <Badge class="mb-6">G8Shield &middot; Coming Soon</Badge>
+
+          <h1 class="text-4xl font-bold tracking-tight text-white sm:text-6xl lg:text-7xl">
+            Kong Guards the Door.
+            <br />
+            <span class="text-gradient">G8Shield Watches Inside.</span>
+          </h1>
+
+          <p class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-slate-400">
+            API security intelligence, compliance reporting, and threat detection — the layer Kong was never designed to deliver.
+            Reads from Kong &amp; Elastic Stack. Acts through Kong Admin API.
+          </p>
+
+          <div class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <Button href="mailto:hello@g8stack.com?subject=G8Shield%20Early%20Access" size="lg">
+              Join the Waitlist
+              <svg class="ml-2 h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </Button>
+            <Button href="#how-it-works" variant="secondary" size="lg">
+              Learn More
+            </Button>
+          </div>
+        </div>
+      </Container>
+
+      <div class="absolute inset-0 -z-10 overflow-hidden">
+        <div class="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/3">
+          <div class="h-[600px] w-[600px] rounded-full bg-rose-500/5 blur-3xl animate-float"></div>
+        </div>
+        <div class="absolute right-0 top-1/2 -translate-y-1/2">
+          <div class="h-[400px] w-[400px] rounded-full bg-violet-500/5 blur-3xl animate-float-delayed"></div>
+        </div>
+      </div>
+    </section>
+
+    {/* ===== What Kong Already Covers ===== */}
+    <section class="border-t border-white/5 py-16">
+      <Container>
+        <div class="max-w-3xl mx-auto" data-aos="fade-up">
+          <p class="text-center text-sm font-medium uppercase tracking-wider text-slate-500 mb-8">
+            What Kong Already Handles
+          </p>
+          <div class="flex flex-wrap items-center justify-center gap-3">
+            {kongCovers.map((item) => (
+              <span class="px-3 py-1.5 text-xs font-medium text-slate-400 bg-white/5 rounded-full border border-white/10">
+                {item}
+              </span>
+            ))}
+          </div>
+          <p class="text-center text-sm text-slate-500 mt-6">
+            G8Shield doesn't duplicate these. It fills the gaps below.
+          </p>
+        </div>
+      </Container>
+    </section>
+
+    {/* ===== What G8Shield Adds ===== */}
+    <section id="features" class="border-t border-white/5 py-20 sm:py-32">
+      <Container>
+        <SectionHeading
+          label="The Gaps"
+          title='What Kong <span class="text-gradient">Doesn&apos;t Cover</span>'
+          description="Kong sees individual requests. G8Shield sees the full picture — patterns, compliance, exposure, and risk."
+        />
+
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" data-aos="fade-up" data-aos-delay="100">
+          {shieldAdds.map((feature) => (
+            <div class="glass-card rounded-xl p-8 transition-all duration-300">
+              <div class:list={["mb-4 inline-flex rounded-lg p-3", feature.color]}>
+                <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d={feature.icon} />
+                </svg>
+              </div>
+              <h3 class="text-lg font-semibold text-white">{feature.title}</h3>
+              <p class="mt-2 text-sm text-slate-400">{feature.description}</p>
+            </div>
+          ))}
+        </div>
+      </Container>
+    </section>
+
+    {/* ===== How It Works ===== */}
+    <section id="how-it-works" class="border-t border-white/5 py-20 sm:py-32">
+      <Container>
+        <SectionHeading
+          label="Architecture"
+          title='Reads, Analyses, <span class="text-gradient">Acts</span>'
+          description="G8Shield is a standalone app — not a Kong plugin. It sits alongside Kong and communicates via APIs."
+        />
+
+        <div class="max-w-3xl mx-auto space-y-6" data-aos="fade-up" data-aos-delay="100">
+          {architecture.map((layer, i) => (
+            <div>
+              {i > 0 && (
+                <div class="flex justify-center py-3">
+                  <svg class="w-6 h-6 text-slate-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                  </svg>
+                </div>
+              )}
+              <div class:list={["rounded-xl border p-6", layer.color]}>
+                <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                  <span class="text-sm font-bold uppercase tracking-wider text-white shrink-0 w-32">
+                    {layer.label}
+                  </span>
+                  <div class="flex flex-wrap gap-2">
+                    {layer.items.map((item) => (
+                      <span class="px-3 py-1 text-xs font-mono font-medium text-slate-300 bg-navy-950/50 rounded-full border border-white/5">
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div class="mt-12 text-center" data-aos="fade-up" data-aos-delay="200">
+          <p class="text-sm text-slate-500 max-w-xl mx-auto">
+            G8Shield reads traffic data from your existing Elastic Stack (via G8Monitor), API configs from Kong Admin API, and governance policies from G8Stack. It pushes enforcement actions back to Kong automatically.
+          </p>
+        </div>
+      </Container>
+    </section>
+
+    {/* ===== Use Cases ===== */}
+    <section id="use-cases" class="py-20 sm:py-32">
+      <Container>
+        <SectionHeading
+          label="Use Cases"
+          title='Who <span class="text-gradient">G8Shield</span> Is For'
+          description="From security teams to CISOs — G8Shield gives every stakeholder the visibility they need."
+        />
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6" data-aos="fade-up" data-aos-delay="100">
+          {usecases.map((uc) => (
+            <div class="glass-card rounded-xl p-8 transition-all duration-300">
+              <span class="inline-block px-3 py-1 text-xs font-semibold text-violet-400 bg-violet-500/10 rounded-full border border-violet-500/20 mb-4">
+                {uc.audience}
+              </span>
+              <h3 class="text-xl font-bold text-white mb-3">{uc.title}</h3>
+              <p class="text-slate-400 leading-relaxed mb-6">{uc.description}</p>
+              <ul class="space-y-3">
+                {uc.benefits.map((benefit) => (
+                  <li class="flex items-start space-x-3">
+                    <svg class="mt-0.5 h-5 w-5 shrink-0 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span class="text-sm text-slate-300">{benefit}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </Container>
+    </section>
+
+    {/* ===== FAQ ===== */}
+    <section id="faq" class="border-t border-white/5 py-20 sm:py-32">
+      <Container>
+        <SectionHeading
+          label="FAQ"
+          title='Frequently Asked <span class="text-gradient">Questions</span>'
+          description="Everything you need to know about G8Shield."
+        />
+
+        <div class="mx-auto max-w-3xl space-y-4" data-aos="fade-up" data-aos-delay="100">
+          {faq.map((item) => (
+            <details class="group glass-card rounded-xl overflow-hidden">
+              <summary class="flex items-center justify-between cursor-pointer p-6 text-white font-semibold hover:text-blue-400 transition-colors">
+                {item.question}
+                <svg class="w-5 h-5 shrink-0 ml-4 transition-transform group-open:rotate-180 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </summary>
+              <div class="px-6 pb-6 text-slate-400 leading-relaxed">
+                {item.answer}
+              </div>
+            </details>
+          ))}
+        </div>
+      </Container>
+
+      <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+    </section>
+
+    {/* ===== CTA ===== */}
+    <section class="border-t border-white/5 py-20 sm:py-32 relative overflow-hidden">
+      <Container>
+        <div class="mx-auto max-w-3xl text-center" data-aos="fade-up">
+          <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+            Interested in G8Shield?
+          </h2>
+          <p class="mx-auto mt-6 max-w-xl text-lg text-slate-400">
+            G8Shield is currently in development. Join the waitlist for early access, or contact us for enterprise integration planning.
+          </p>
+          <div class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <Button href="mailto:hello@g8stack.com?subject=G8Shield%20Early%20Access" size="lg">
+              Join the Waitlist
+              <svg class="ml-2 h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </Button>
+            <Button href="/products/connect" variant="secondary" size="lg">
+              Explore G8Connect
+            </Button>
+          </div>
+        </div>
+      </Container>
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-rose-500/5 rounded-full blur-3xl -z-10"></div>
+    </section>
+
+  </main>
+  <Footer />
+</BaseLayout>

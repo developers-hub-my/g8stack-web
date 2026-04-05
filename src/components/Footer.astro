@@ -1,9 +1,10 @@
 ---
 import Container from "./ui/Container.astro";
+import { products } from "../data/navigation";
 
 const footerLinks = [
   {
-    title: "Product",
+    title: "G8Stack",
     links: [
       { label: "What's Included", href: "#features" },
       { label: "How It Works", href: "#how-it-works" },
@@ -28,7 +29,7 @@ const footerLinks = [
 
 <footer class="border-t border-white/5 py-16">
   <Container>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
       <!-- Brand -->
       <div>
         <a href="/" class="flex items-center gap-3 mb-4">
@@ -52,6 +53,32 @@ const footerLinks = [
             </svg>
           </a>
         </div>
+      </div>
+
+      <!-- Products column -->
+      <div>
+        <h4 class="text-sm font-semibold text-white mb-4">Products</h4>
+        <ul class="space-y-3">
+          {products.map((product) => (
+            <li>
+              <a
+                href={product.available ? product.href : undefined}
+                class:list={[
+                  "flex items-center gap-2 text-sm transition-colors",
+                  product.available
+                    ? "text-slate-500 hover:text-slate-300"
+                    : "text-slate-600 cursor-default",
+                ]}
+              >
+                <img src={product.logo} alt={product.name} class="w-4 h-4" />
+                {product.name}
+                {!product.available && (
+                  <span class="text-[10px] text-slate-600">Soon</span>
+                )}
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
 
       <!-- Link columns -->

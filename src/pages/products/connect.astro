@@ -1,0 +1,445 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/ui/Container.astro";
+import Button from "@/components/ui/Button.astro";
+import Badge from "@/components/ui/Badge.astro";
+import SectionHeading from "@/components/ui/SectionHeading.astro";
+import Navbar from "@/components/Navbar.astro";
+import Footer from "@/components/Footer.astro";
+import "@/styles/global.css";
+
+const dataSources = [
+  { name: "PostgreSQL", logo: "/images/postgresql.svg" },
+  { name: "MySQL", logo: "/images/mysql.svg" },
+  { name: "MSSQL", logo: "/images/mssql.svg" },
+  { name: "Oracle", logo: "/images/oracle.svg" },
+  { name: "SQLite", logo: "/images/sqlite.svg" },
+  { name: "CSV", logo: "/images/csv.svg" },
+  { name: "JSON", logo: "/images/json.svg" },
+  { name: "Excel", logo: "/images/excel.svg" },
+];
+
+const steps = [
+  { number: "1", title: "Connect", description: "Add your data source — PostgreSQL, MySQL, MSSQL, SQLite, or upload CSV/JSON/Excel files.", color: "bg-emerald-500/20 text-emerald-400" },
+  { number: "2", title: "Introspect", description: "G8Connect reads your schema automatically — tables, columns, data types, all detected.", color: "bg-emerald-500/20 text-emerald-400" },
+  { number: "3", title: "Configure", description: "Pick fields, choose HTTP methods, set filters — or let Simple Mode auto-configure everything.", color: "bg-emerald-500/20 text-emerald-400" },
+  { number: "4", title: "PII Detection", description: "Sensitive columns flagged automatically — passwords, IC numbers, bank details excluded by default.", color: "bg-amber-500/20 text-amber-400" },
+  { number: "5", title: "Generate Spec", description: "OpenAPI 3.1 spec generated instantly. Review it, version it, refine it before submission.", color: "bg-cyan-500/20 text-cyan-400" },
+  { number: "6", title: "Push to G8Stack", description: "Submit to G8Stack for governance approval. Only approved specs deploy to Kong Gateway.", color: "bg-blue-500/20 text-blue-400" },
+];
+
+const modes = [
+  {
+    badge: "Easiest",
+    name: "Simple Mode",
+    audience: "For non-technical users",
+    highlight: false,
+    features: ["Pick a table", "Auto-generate full CRUD spec", "Zero configuration needed", "PII auto-excluded"],
+  },
+  {
+    badge: "Most Popular",
+    name: "Guided Mode",
+    audience: "For backend developers",
+    highlight: true,
+    features: ["Choose fields to expose or exclude", "Select HTTP methods per endpoint", "Configure filters and pagination", "Rename fields for API consumers", "Preview with sample data"],
+  },
+  {
+    badge: "Power Users",
+    name: "Advanced Mode",
+    audience: "For data scientists",
+    highlight: false,
+    features: [
+      { text: "Write custom SELECT queries", shield: false },
+      { text: "JOINs, CTEs, aggregations", shield: false },
+      { text: "Named GET endpoints", shield: false },
+      { text: "Parameter binding to query params", shield: false },
+      { text: "Read-only, sandboxed execution", shield: true },
+    ],
+  },
+];
+
+const features = [
+  { title: "Encrypted Credentials", description: "All data source credentials encrypted at rest. Never logged, never exposed in error messages, never stored in plaintext.", iconPath: "M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z", color: "bg-blue-500/10 text-blue-400" },
+  { title: "PII Auto-Detection", description: "Sensitive columns like NRIC, passwords, and bank details flagged automatically and excluded from specs by default.", iconPath: "M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178zM15 12a3 3 0 11-6 0 3 3 0 016 0z", color: "bg-amber-500/10 text-amber-400" },
+  { title: "Full Audit Trail", description: "Every connection, introspection, and spec generation is logged. Know who accessed what, when, and why.", iconPath: "M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z", color: "bg-violet-500/10 text-violet-400" },
+  { title: "Read-Only Connections", description: "Data source connections enforced as read-only at the connector level. G8Connect never writes to your databases.", iconPath: "M12 9v3.75m0-10.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.75c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.57-.598-3.75h-.152c-3.196 0-6.1-1.249-8.25-3.286zm0 13.036h.008v.008H12v-.008z", color: "bg-rose-500/10 text-rose-400" },
+  { title: "Multiple Data Sources", description: "PostgreSQL, MySQL, MSSQL, SQLite for databases. CSV, JSON, and Excel for file-based sources — all through one interface.", iconPath: "M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125", color: "bg-blue-500/10 text-blue-400" },
+  { title: "Spec Versioning", description: "Every regeneration creates a new version. Compare specs, track changes, and submit only when ready.", iconPath: "M2.25 15a4.5 4.5 0 004.5 4.5H18a3.75 3.75 0 001.332-7.257 3 3 0 00-3.758-3.848 5.25 5.25 0 00-10.233 2.33A4.502 4.502 0 002.25 15z", color: "bg-violet-500/10 text-violet-400" },
+];
+
+const usecases = [
+  { audience: "API Platform Teams", title: "Accelerate API Delivery", description: "Stop writing boilerplate. Connect data sources, generate specs, and ship APIs in minutes instead of weeks.", benefits: ["Auto-generate OpenAPI specs from any data source", "Built-in versioning and documentation", "Consistent API patterns across all services", "Governance workflow before deployment"] },
+  { audience: "Data Engineering Teams", title: "Expose Data Safely", description: "Give stakeholders API access to data without compromising security or building custom endpoints.", benefits: ["File source support (CSV, JSON, Excel)", "Automatic PII detection and exclusion", "Read-only connections with audit trail", "SQL mode for complex analytical queries"] },
+  { audience: "Technical Leadership", title: "Govern API Exposure", description: "Maintain control over what data gets exposed. Every spec requires approval through your governance workflow.", benefits: ["Nothing deploys without approval", "Role-based access control (4 levels)", "Full audit trail on every operation", "Encrypted credentials at rest"] },
+  { audience: "Regulated Industries", title: "Stay Compliant", description: "Built-in safeguards for industries that need strict data handling — finance, healthcare, government.", benefits: ["PII auto-detection for compliance", "Immutable spec versioning for audit", "SQL whitelist parser blocks dangerous operations", "Security headers enforced on all responses"] },
+];
+
+const plans = [
+  {
+    name: "Open Source",
+    price: "Free Forever",
+    description: "Full-featured, self-hosted, MIT licensed. Everything you need to generate governed APIs.",
+    features: ["All database & file connectors", "All 3 wizard modes", "OpenAPI 3.1 spec generation", "PII detection & auto-exclusion", "Dynamic API runtime with live CRUD", "API key authentication & rate limiting", "Role-based access control", "Immutable spec versioning", "Full audit trail", "Community support via GitHub"],
+    cta: "Get Started",
+    ctaHref: "https://github.com/developers-hub-my/g8stack-connect",
+    ctaVariant: "primary" as const,
+    highlight: true,
+  },
+  {
+    name: "Enterprise",
+    price: "Custom",
+    description: "Dedicated support, managed setup, and deep integrations for organisations that need more.",
+    features: ["Everything in Open Source", "Dedicated setup & onboarding", "Priority support with SLA", "SSO / SAML / Keycloak integration", "G8Stack governance integration", "Kong API Gateway deployment pipeline", "Custom connector development", "Multi-org & tenant isolation", "Advanced compliance & audit reports", "On-premise deployment support"],
+    cta: "Contact Us",
+    ctaHref: "mailto:hello@g8stack.com?subject=G8Connect%20Enterprise",
+    ctaVariant: "secondary" as const,
+    highlight: false,
+  },
+];
+
+const faq = [
+  { question: "What data sources does G8Connect support?", answer: "G8Connect supports four database types — PostgreSQL, MySQL (MariaDB compatible), Microsoft SQL Server, and SQLite. It also supports file sources including CSV, JSON, and Excel (.xlsx) with automatic type inference and multi-sheet support." },
+  { question: "Does G8Connect deploy APIs directly?", answer: "No. G8Connect follows a governance-first architecture. It generates OpenAPI specs that must go through G8Stack's approval workflow before deployment to Kong API Gateway. This ensures nothing goes live without proper review." },
+  { question: "How does PII detection work?", answer: "G8Connect automatically scans column names for sensitive patterns — passwords, IC numbers, SSN, credit cards, email, phone, passport, and more. Flagged columns are excluded from generated specs by default. You must explicitly opt-in to expose any PII field." },
+  { question: "Is the SQL mode safe for production use?", answer: "Yes. The SQL whitelist parser only allows SELECT and WITH (CTE) statements, blocking 28+ dangerous keywords including INSERT, UPDATE, DELETE, DROP, and ALTER. System tables are blocked, queries timeout at 10 seconds, and results are capped at 1,000 rows — all hardcoded and non-configurable." },
+  { question: "Is G8Connect free?", answer: "Yes, always. G8Connect is fully open source under the MIT license with all features included. The Enterprise plan adds dedicated support, managed setup, SSO integration, and G8Stack governance pipeline — but the core product is free forever." },
+  { question: "What does the Enterprise plan include?", answer: "Enterprise provides dedicated setup and onboarding, priority support with SLA, SSO/SAML/Keycloak integration, G8Stack governance integration, Kong deployment pipeline, custom connector development, multi-org tenant isolation, and on-premise deployment support." },
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faq.map((item) => ({
+    "@type": "Question",
+    name: item.question,
+    acceptedAnswer: { "@type": "Answer", text: item.answer },
+  })),
+};
+---
+
+<BaseLayout
+  title="G8Connect — Data Source to API in Minutes | G8Stack"
+  description="Connect any database or file, introspect the schema, and auto-generate OpenAPI specs. Every spec goes through G8Stack governance before deployment."
+>
+  <Navbar />
+  <main>
+
+    {/* ===== Hero ===== */}
+    <section class="relative overflow-hidden pt-32 pb-20 sm:pt-44 sm:pb-32">
+      <Container>
+        <div class="text-center" data-aos="fade-up">
+          <div class="flex items-center justify-center gap-3 mb-6">
+            <img src="/images/g8connect-logo.svg" alt="G8Connect" class="h-10 w-10" />
+            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse-dot"></span>
+              G8Connect
+            </span>
+          </div>
+
+          <h1 class="text-4xl font-bold tracking-tight text-white sm:text-6xl lg:text-7xl">
+            Data Source to
+            <span class="bg-gradient-to-r from-emerald-500 to-cyan-400 bg-clip-text text-transparent">API</span>
+            in Minutes
+          </h1>
+
+          <p class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-slate-400">
+            Connect any database or file, introspect the schema, and auto-generate OpenAPI specs.
+            Every spec goes through <strong class="text-white">G8Stack governance</strong> before deployment.
+          </p>
+
+          <div class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <Button href="https://github.com/developers-hub-my/g8stack-connect#getting-started" size="lg">
+              Start Building APIs
+              <svg class="ml-2 h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </Button>
+            <Button href="#how-it-works" variant="secondary" size="lg">
+              See How It Works
+            </Button>
+          </div>
+        </div>
+      </Container>
+
+      <div class="absolute inset-0 -z-10 overflow-hidden">
+        <div class="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/3">
+          <div class="h-[600px] w-[600px] rounded-full bg-emerald-500/10 blur-3xl animate-float"></div>
+        </div>
+        <div class="absolute right-0 top-1/2 -translate-y-1/2">
+          <div class="h-[400px] w-[400px] rounded-full bg-cyan-500/5 blur-3xl animate-float-delayed"></div>
+        </div>
+      </div>
+    </section>
+
+    {/* ===== Data Sources ===== */}
+    <section class="border-t border-white/5 py-16">
+      <Container>
+        <p class="text-center text-sm font-medium uppercase tracking-wider text-slate-500 mb-10" data-aos="fade-up">
+          Supported Data Sources
+        </p>
+        <div class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-8 gap-6 items-center justify-items-center" data-aos="fade-up" data-aos-delay="100">
+          {dataSources.map((source) => (
+            <div class="flex flex-col items-center gap-3 group">
+              <div class="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center rounded-xl bg-white p-3 sm:p-4 group-hover:scale-105 transition-transform shadow-sm">
+                <img src={source.logo} alt={source.name} class="w-full h-full object-contain" loading="lazy" />
+              </div>
+              <span class="text-xs sm:text-sm font-medium text-slate-500 group-hover:text-slate-300 transition-colors">{source.name}</span>
+            </div>
+          ))}
+        </div>
+      </Container>
+    </section>
+
+    {/* ===== How It Works ===== */}
+    <section id="how-it-works" class="border-t border-white/5 py-20 sm:py-32">
+      <Container>
+        <SectionHeading
+          label="How It Works"
+          title='From Data Source to <span class="bg-gradient-to-r from-emerald-500 to-cyan-400 bg-clip-text text-transparent" style="-webkit-text-fill-color:transparent">Governed API</span>'
+          description="Six steps from connection to deployment. You generate — G8Stack governs."
+        />
+
+        <div class="grid gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/5 sm:grid-cols-2 lg:grid-cols-3" data-aos="fade-up" data-aos-delay="100">
+          {steps.map((step) => (
+            <div class="relative bg-navy-950 p-8">
+              <div class="mb-4 flex items-center space-x-3">
+                <span class:list={["flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold", step.color]}>
+                  {step.number}
+                </span>
+                <h3 class="font-semibold text-white">{step.title}</h3>
+              </div>
+              <p class="text-sm text-slate-400">{step.description}</p>
+            </div>
+          ))}
+        </div>
+      </Container>
+    </section>
+
+    {/* ===== Wizard Modes ===== */}
+    <section id="wizard-modes" class="py-20 sm:py-32">
+      <Container>
+        <SectionHeading
+          label="Wizard Modes"
+          title='Three Modes, <span class="bg-gradient-to-r from-emerald-500 to-cyan-400 bg-clip-text text-transparent" style="-webkit-text-fill-color:transparent">One Output</span>'
+          description="Whether you're a non-technical user or a data scientist, G8Connect adapts to your workflow."
+        />
+
+        <div class="grid gap-8 lg:grid-cols-3" data-aos="fade-up" data-aos-delay="100">
+          {modes.map((mode) => (
+            <div class:list={["relative overflow-hidden rounded-2xl", mode.highlight ? "glass-card border-2 !border-emerald-500/50 shadow-lg shadow-emerald-500/10" : "glass-card"]}>
+              <div class:list={["border-b px-8 py-6", mode.highlight ? "border-emerald-500/30 bg-emerald-500/5" : "border-white/5 bg-white/[0.02]"]}>
+                <span class:list={["mb-2 inline-flex rounded-full px-3 py-1 text-xs font-semibold", mode.highlight ? "bg-emerald-500/20 text-emerald-400" : "bg-white/10 text-slate-400"]}>
+                  {mode.badge}
+                </span>
+                <h3 class="text-xl font-bold text-white">{mode.name}</h3>
+                <p class="mt-1 text-sm text-slate-400">{mode.audience}</p>
+              </div>
+              <div class="p-8">
+                <ul class="space-y-3">
+                  {mode.features.map((feature) => {
+                    const text = typeof feature === "string" ? feature : feature.text;
+                    const isShield = typeof feature !== "string" && feature.shield;
+                    return (
+                      <li class="flex items-start space-x-3">
+                        {isShield ? (
+                          <svg class="mt-0.5 h-5 w-5 shrink-0 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+                          </svg>
+                        ) : (
+                          <svg class="mt-0.5 h-5 w-5 shrink-0 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                          </svg>
+                        )}
+                        <span class="text-sm text-slate-300">{text}</span>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            </div>
+          ))}
+        </div>
+      </Container>
+    </section>
+
+    {/* ===== Features ===== */}
+    <section id="connect-features" class="border-t border-white/5 py-20 sm:py-32">
+      <Container>
+        <SectionHeading
+          label="Security"
+          title='Built for <span class="bg-gradient-to-r from-emerald-500 to-cyan-400 bg-clip-text text-transparent" style="-webkit-text-fill-color:transparent">Governed Environments</span>'
+          description="Security, audit trails, and compliance built in from day one."
+        />
+
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" data-aos="fade-up" data-aos-delay="100">
+          {features.map((feature) => (
+            <div class="glass-card rounded-xl p-8 transition-all duration-300">
+              <div class:list={["mb-4 inline-flex rounded-lg p-3", feature.color]}>
+                <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d={feature.iconPath} />
+                </svg>
+              </div>
+              <h3 class="text-lg font-semibold text-white">{feature.title}</h3>
+              <p class="mt-2 text-sm text-slate-400">{feature.description}</p>
+            </div>
+          ))}
+        </div>
+      </Container>
+    </section>
+
+    {/* ===== Governance CTA ===== */}
+    <section class="border-t border-white/5 py-20 sm:py-32 relative">
+      <Container>
+        <div class="mx-auto max-w-3xl text-center" data-aos="fade-up">
+          <div class="mb-6 inline-flex rounded-lg bg-emerald-500/10 p-4">
+            <svg class="h-10 w-10 text-emerald-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
+            </svg>
+          </div>
+          <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+            Speed Up Creation.<br>Never Skip Governance.
+          </h2>
+          <p class="mx-auto mt-6 max-w-xl text-lg text-slate-400">
+            G8Connect generates specs. G8Stack approves them. Kong deploys them.
+            Clear separation of concerns for teams that take API governance seriously.
+          </p>
+        </div>
+      </Container>
+    </section>
+
+    {/* ===== Use Cases ===== */}
+    <section id="connect-use-cases" class="py-20 sm:py-32">
+      <Container>
+        <SectionHeading
+          label="Use Cases"
+          title='Who <span class="bg-gradient-to-r from-emerald-500 to-cyan-400 bg-clip-text text-transparent" style="-webkit-text-fill-color:transparent">G8Connect</span> Is For'
+          description="G8Connect adapts to different roles and industries — from platform teams to regulated enterprises."
+        />
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6" data-aos="fade-up" data-aos-delay="100">
+          {usecases.map((uc) => (
+            <div class="glass-card rounded-xl p-8 transition-all duration-300">
+              <span class="inline-block px-3 py-1 text-xs font-semibold text-violet-400 bg-violet-500/10 rounded-full border border-violet-500/20 mb-4">
+                {uc.audience}
+              </span>
+              <h3 class="text-xl font-bold text-white mb-3">{uc.title}</h3>
+              <p class="text-slate-400 leading-relaxed mb-6">{uc.description}</p>
+              <ul class="space-y-3">
+                {uc.benefits.map((benefit) => (
+                  <li class="flex items-start space-x-3">
+                    <svg class="mt-0.5 h-5 w-5 shrink-0 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span class="text-sm text-slate-300">{benefit}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </Container>
+    </section>
+
+    {/* ===== Pricing ===== */}
+    <section id="connect-pricing" class="border-t border-white/5 py-20 sm:py-32">
+      <Container>
+        <SectionHeading
+          label="Pricing"
+          title='Always <span class="bg-gradient-to-r from-emerald-500 to-cyan-400 bg-clip-text text-transparent" style="-webkit-text-fill-color:transparent">Open Source</span>'
+          description="The full platform is free and open source. Enterprise adds dedicated support, managed setup, and integrations."
+        />
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto" data-aos="fade-up" data-aos-delay="100">
+          {plans.map((plan) => (
+            <div class:list={["relative overflow-hidden rounded-2xl p-8", plan.highlight ? "glass-card border-2 !border-emerald-500/50 shadow-lg shadow-emerald-500/10" : "glass-card"]}>
+              {plan.highlight && (
+                <span class="absolute top-0 right-0 rounded-bl-lg bg-gradient-to-r from-emerald-500 to-cyan-400 px-3 py-1 text-xs font-semibold text-white">
+                  Recommended
+                </span>
+              )}
+              <h3 class="text-2xl font-bold text-white mb-2">{plan.name}</h3>
+              <div class="mb-4">
+                <span class="text-3xl font-extrabold text-white">{plan.price}</span>
+              </div>
+              <p class="text-slate-400 mb-8">{plan.description}</p>
+              <ul class="space-y-3 mb-8">
+                {plan.features.map((feature) => (
+                  <li class="flex items-start space-x-3">
+                    <svg class="mt-0.5 h-5 w-5 shrink-0 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span class="text-sm text-slate-300">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+              <Button href={plan.ctaHref} variant={plan.ctaVariant} class="w-full text-center">
+                {plan.cta}
+              </Button>
+            </div>
+          ))}
+        </div>
+      </Container>
+    </section>
+
+    {/* ===== FAQ ===== */}
+    <section id="connect-faq" class="py-20 sm:py-32">
+      <Container>
+        <SectionHeading
+          label="FAQ"
+          title='Frequently Asked <span class="bg-gradient-to-r from-emerald-500 to-cyan-400 bg-clip-text text-transparent" style="-webkit-text-fill-color:transparent">Questions</span>'
+          description="Everything you need to know about G8Connect."
+        />
+
+        <div class="mx-auto max-w-3xl space-y-4" data-aos="fade-up" data-aos-delay="100">
+          {faq.map((item) => (
+            <details class="group glass-card rounded-xl overflow-hidden">
+              <summary class="flex items-center justify-between cursor-pointer p-6 text-white font-semibold hover:text-emerald-400 transition-colors">
+                {item.question}
+                <svg class="w-5 h-5 shrink-0 ml-4 transition-transform group-open:rotate-180 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </summary>
+              <div class="px-6 pb-6 text-slate-400 leading-relaxed">
+                {item.answer}
+              </div>
+            </details>
+          ))}
+        </div>
+      </Container>
+
+      <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+    </section>
+
+    {/* ===== Final CTA ===== */}
+    <section class="border-t border-white/5 py-20 sm:py-32 relative overflow-hidden">
+      <Container>
+        <div class="mx-auto max-w-3xl text-center" data-aos="fade-up">
+          <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+            Ready to turn your data into APIs?
+          </h2>
+          <p class="mx-auto mt-6 max-w-xl text-lg text-slate-400">
+            G8Connect is open source and free forever. Get started in minutes with Docker,
+            or explore the documentation to learn more.
+          </p>
+          <div class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <Button href="https://github.com/developers-hub-my/g8stack-connect#getting-started" size="lg">
+              Get Started Free
+              <svg class="ml-2 h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </Button>
+            <Button href="https://github.com/developers-hub-my/g8stack-connect" variant="secondary" size="lg">
+              <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+              </svg>
+              View on GitHub
+            </Button>
+          </div>
+        </div>
+      </Container>
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-emerald-500/5 rounded-full blur-3xl -z-10"></div>
+    </section>
+
+  </main>
+  <Footer />
+</BaseLayout>
