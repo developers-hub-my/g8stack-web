@@ -6,6 +6,7 @@ import Badge from "@/components/ui/Badge.astro";
 import SectionHeading from "@/components/ui/SectionHeading.astro";
 import Navbar from "@/components/Navbar.astro";
 import Footer from "@/components/Footer.astro";
+import { site } from "@/data/site";
 import "@/styles/global.css";
 
 const threats = [
@@ -34,17 +35,17 @@ const threats = [
 const problems = [
   {
     problem: "Shadow APIs — You Can't Protect What You Can't See",
-    scenario: "A developer deployed a /debug endpoint 8 months ago for testing. It's still live, unauthenticated, returning internal database IDs and user emails. Kong doesn't know it exists because nobody registered it as a route.",
-    cause: "Kong only protects APIs you explicitly register. Every unregistered, forgotten, or undocumented endpoint is a blind spot. As teams grow and microservices multiply, shadow APIs accumulate silently.",
+    scenario: "A developer deployed a /debug endpoint 8 months ago for testing. It's still live, unauthenticated, returning internal database IDs and user emails. Nobody knows it exists because it was never documented.",
+    cause: "API gateways only protect routes you explicitly register. Every unregistered, forgotten, or undocumented endpoint is a blind spot. As teams grow and microservices multiply, shadow APIs accumulate silently.",
     impact: "Attackers actively scan for shadow APIs. One unprotected endpoint can expose your entire internal schema, user data, or authentication tokens.",
-    solution: "G8Shield passively analyses all traffic flowing through your infrastructure — not just Kong-registered routes. It discovers every endpoint that receives requests, maps them against your registered API inventory, and flags undocumented APIs with risk scores.",
+    solution: "G8Shield passively analyses all traffic flowing through your infrastructure. It discovers every endpoint that receives requests, maps them against your registered API inventory, and flags undocumented APIs with risk scores.",
     icon: "M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z",
     color: "bg-rose-500/10 text-rose-400 border-rose-500/20",
   },
   {
     problem: "Slow Attacks — Death by a Thousand Requests",
-    scenario: "An attacker runs credential stuffing against your /login API at 2 requests per second — well under your rate limit of 100/min. After 3 days, they've tested 500,000 username/password combinations. Kong saw nothing unusual because each individual request was valid.",
-    cause: "Kong evaluates each request independently. It cannot correlate patterns across requests, endpoints, time windows, or user sessions. Low-and-slow attacks are invisible at the individual request level.",
+    scenario: "An attacker runs credential stuffing against your /login API at 2 requests per second — well under your rate limit of 100/min. After 3 days, they've tested 500,000 username/password combinations. Each individual request looked perfectly valid.",
+    cause: "Traditional API security evaluates each request independently. It cannot correlate patterns across requests, endpoints, time windows, or user sessions. Low-and-slow attacks are invisible at the individual request level.",
     impact: "Account takeover, data exfiltration, and fraud — all happening while your dashboards show green. You only discover it when customers report compromised accounts.",
     solution: "G8Shield correlates request sequences across endpoints, time, and identity. It detects credential stuffing, account enumeration, API scraping, and business logic abuse by analysing behavioural patterns — not just individual request properties.",
     icon: "M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5m.75-9l3-3 2.148 2.148A12.061 12.061 0 0116.5 7.605",
@@ -53,16 +54,16 @@ const problems = [
   {
     problem: "Data Leakage — Your APIs Are Bleeding PII",
     scenario: "A frontend developer adds a new field to the user profile API. The response now includes `ic_number`, `salary`, and `password_hash` alongside the display name. No one reviews the response payload. It goes to production.",
-    cause: "Kong validates request structure but never inspects response bodies. There is no mechanism to detect when an API response contains sensitive data — PII, credentials, tokens, or internal identifiers.",
+    cause: "Most API security validates request structure but never inspects response bodies. There is no mechanism to detect when an API response contains sensitive data — PII, credentials, tokens, or internal identifiers.",
     impact: "PDPA, GDPR, and PCI-DSS violations. Customer data exposed to any authenticated API consumer. One leaked field can trigger mandatory breach notifications and regulatory fines.",
-    solution: "G8Shield scans API response bodies in real-time for sensitive data patterns — IC numbers, credit cards, passwords, tokens, emails, phone numbers. It alerts immediately and can auto-block the endpoint via Kong Admin API until the leak is fixed.",
+    solution: "G8Shield scans API response bodies in real-time for sensitive data patterns — IC numbers, credit cards, passwords, tokens, emails, phone numbers. It alerts immediately and can auto-block the endpoint until the leak is fixed.",
     icon: "M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178zM15 12a3 3 0 11-6 0 3 3 0 016 0z",
     color: "bg-violet-500/10 text-violet-400 border-violet-500/20",
   },
   {
     problem: "Compliance Gaps — The Audit You Can't Pass",
-    scenario: "Your SOC2 auditor asks: 'Show me which APIs handle payment data, what security controls are applied to each, and evidence that those controls haven't drifted since your last review.' Your team spends 3 weeks screenshotting Kong configs and grepping Kibana.",
-    cause: "Kong has no concept of compliance frameworks. It applies plugins per-route but doesn't map them to regulatory requirements, track configuration drift, or generate audit evidence. Compliance is a manual, reactive exercise.",
+    scenario: "Your SOC2 auditor asks: 'Show me which APIs handle payment data, what security controls are applied to each, and evidence that those controls haven't drifted since your last review.' Your team spends 3 weeks screenshotting configs and grepping logs.",
+    cause: "API gateways have no concept of compliance frameworks. Security controls are applied per-route but never mapped to regulatory requirements. Configuration drift goes undetected. Compliance is a manual, reactive exercise.",
     impact: "Failed audits, delayed certifications, lost enterprise deals. Continuous compliance is impossible when evidence collection is manual. Configuration drift goes undetected until the next audit cycle.",
     solution: "G8Shield continuously maps your API security posture against PCI-DSS, GDPR, SOC2, and PDPA frameworks. It detects configuration drift in real-time, auto-generates auditor-ready reports, and maintains a living evidence trail that's always current.",
     icon: "M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25",
@@ -70,8 +71,8 @@ const problems = [
   },
   {
     problem: "Blind Spots — No Security Posture, Just Logs",
-    scenario: "Your CISO asks: 'How secure are our APIs right now? Are we more or less secure than last quarter?' Your team opens Kibana, stares at request logs, and says '...we don't know.'",
-    cause: "Kong produces operational logs, not security intelligence. Elastic Stack stores them, but raw logs don't answer strategic security questions. There is no risk scoring, no trending, no per-API security posture view.",
+    scenario: "Your CISO asks: 'How secure are our APIs right now? Are we more or less secure than last quarter?' Your team opens the log dashboard, stares at request metrics, and says '...we don't know.'",
+    cause: "Operational logs tell you what happened, not how secure you are. Raw request metrics don't answer strategic security questions. There is no risk scoring, no trending, no per-API security posture view.",
     impact: "Security decisions are reactive, not proactive. You only know about problems after they become incidents. Leadership cannot assess risk or allocate security investment based on data.",
     solution: "G8Shield assigns risk scores to every API based on authentication strength, data sensitivity, traffic anomalies, compliance status, and exposure surface. Track scores over time, compare across services, and give leadership a single number that answers 'how secure are we?'",
     icon: "M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z",
@@ -79,8 +80,8 @@ const problems = [
   },
   {
     problem: "Isolated Alerts — No Connected Picture",
-    scenario: "At 2:14 AM, Kong blocks 50 requests from IP 103.x.x.x for rate limiting. At 2:16 AM, a different IP hits a shadow endpoint. At 2:18 AM, a valid API key starts downloading bulk data from /users. These are three separate log entries. Nobody connects them as one coordinated attack.",
-    cause: "Kong and Elastic Stack treat every event independently. There is no correlation engine, no attack graph, no timeline view that connects related events across IPs, endpoints, and time windows into a single narrative.",
+    scenario: "At 2:14 AM, your gateway blocks 50 requests from IP 103.x.x.x for rate limiting. At 2:16 AM, a different IP hits a shadow endpoint. At 2:18 AM, a valid API key starts downloading bulk data from /users. These are three separate log entries. Nobody connects them as one coordinated attack.",
+    cause: "Gateways and log systems treat every event independently. There is no correlation engine, no attack graph, no timeline view that connects related events across IPs, endpoints, and time windows into a single narrative.",
     impact: "Coordinated attacks go undetected. Your SOC team drowns in isolated alerts. The attack succeeds because no one sees the full picture until the forensics report — days or weeks later.",
     solution: "G8Shield builds attack timelines by correlating events across IPs, endpoints, API keys, and time. It groups related events into incidents, assigns severity, and presents a single narrative instead of thousands of disconnected log lines.",
     icon: "M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244",
@@ -89,56 +90,17 @@ const problems = [
 ];
 
 const architecture = [
-  { label: "Reads From", color: "border-blue-500/20 bg-blue-500/5", items: ["Kong Admin API", "Elastic Stack (via G8Monitor)", "G8Stack Governance"] },
+  { label: "Reads From", color: "border-blue-500/20 bg-blue-500/5", items: ["API Gateway", "Elastic Stack (G8Monitor)", "G8Stack Governance"] },
   { label: "Analyses", color: "border-violet-500/20 bg-violet-500/5", items: ["Traffic patterns", "Attack sequences", "Compliance gaps", "Data exposure", "API inventory"] },
-  { label: "Acts On", color: "border-rose-500/20 bg-rose-500/5", items: ["Block IPs via Kong", "Disable endpoints", "Alert SOC/SIEM", "Generate reports", "Update policies"] },
-];
-
-const clients = [
-  {
-    type: "Banks & Fintech",
-    trigger: "BNM / MAS regulatory pressure",
-    needs: "PCI-DSS compliance, PII monitoring, transaction API protection",
-    icon: "M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z",
-  },
-  {
-    type: "Government Agencies",
-    trigger: "PDPA / MyDigital compliance mandates",
-    needs: "Shadow API discovery, citizen data protection, audit trail",
-    icon: "M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z",
-  },
-  {
-    type: "Enterprise with Many Teams",
-    trigger: "Lost track of what APIs exist",
-    needs: "API inventory, posture scoring, policy governance across teams",
-    icon: "M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z",
-  },
-  {
-    type: "Post-Breach Companies",
-    trigger: "Got burned, never again",
-    needs: "Threat detection, automated response, forensic investigation",
-    icon: "M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z",
-  },
-  {
-    type: "SOC2-Certified Companies",
-    trigger: "Auditor demands evidence",
-    needs: "Continuous compliance, automated evidence collection, drift detection",
-    icon: "M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z",
-  },
-  {
-    type: "SaaS Platforms",
-    trigger: "Multi-tenant API security at scale",
-    needs: "Per-tenant risk scoring, data isolation monitoring, abuse detection",
-    icon: "M2.25 15a4.5 4.5 0 004.5 4.5H18a3.75 3.75 0 001.332-7.257 3 3 0 00-3.758-3.848 5.25 5.25 0 00-10.233 2.33A4.502 4.502 0 002.25 15z",
-  },
+  { label: "Acts On", color: "border-rose-500/20 bg-rose-500/5", items: ["Block threats", "Disable endpoints", "Alert SOC/SIEM", "Generate reports", "Enforce policies"] },
 ];
 
 const faq = [
-  { question: "Is G8Shield a Kong plugin?", answer: "No. G8Shield is a standalone application that sits alongside Kong, not inside it. Kong plugins process individual requests — G8Shield correlates across requests, endpoints, and time, which requires its own data store and analysis engine. It communicates with Kong via the Admin API for automated enforcement." },
-  { question: "How does G8Shield get its data?", answer: "G8Shield reads from three sources: Kong Admin API (for API inventory and plugin configurations), your Elastic Stack (for traffic logs and metrics that Kong already sends there via G8Monitor), and G8Stack (for governance policies and approved API specs)." },
-  { question: "Can G8Shield automatically block threats?", answer: "Yes. When G8Shield detects a threat, it can push configurations back to Kong via the Admin API — adding IP restrictions, enabling rate limiting, or disabling compromised endpoints. You control which responses are automated and which require manual approval." },
+  { question: "Is G8Shield a gateway plugin?", answer: "No. G8Shield is a standalone application that works alongside your API gateway. Gateway plugins process individual requests — G8Shield correlates across requests, endpoints, and time, which requires its own data store and analysis engine. It integrates with your gateway's admin API for automated enforcement." },
+  { question: "How does G8Shield get its data?", answer: "G8Shield reads from three sources: your API gateway (for API inventory and configurations), your Elastic Stack via G8Monitor (for traffic logs and metrics), and G8Stack (for governance policies and approved API specs)." },
+  { question: "Can G8Shield automatically block threats?", answer: "Yes. When G8Shield detects a threat, it can push enforcement actions automatically — adding IP restrictions, enabling rate limiting, or disabling compromised endpoints. You control which responses are automated and which require manual approval." },
   { question: "What compliance frameworks does it support?", answer: "G8Shield supports PCI-DSS, GDPR, SOC2, and PDPA compliance reporting out of the box. It continuously assesses your API configurations against these frameworks and generates auditor-ready reports with gap analysis and evidence collection." },
-  { question: "Does it replace our existing security tools?", answer: "No. G8Shield complements Kong's built-in security plugins and your existing SIEM/SOC tools. It fills the gaps that Kong doesn't cover — threat intelligence, business logic abuse, compliance reporting, and security posture management — and integrates with your existing stack." },
+  { question: "Does it replace our existing security tools?", answer: "No. G8Shield complements your existing gateway security and SIEM/SOC tools. It adds the intelligence layer — threat correlation, business logic abuse detection, compliance reporting, and security posture management — on top of your current stack." },
   { question: "When will G8Shield be available?", answer: "G8Shield is currently in development. Join the waitlist to be notified when early access is available. Enterprise customers can contact us for priority access and custom integration planning." },
 ];
 
@@ -155,7 +117,7 @@ const faqSchema = {
 
 <BaseLayout
   title="G8Shield — API Security Intelligence & Compliance | G8Stack"
-  description="API security intelligence layer for Kong. Threat detection, compliance reporting, shadow API discovery, and security posture scoring — what Kong doesn't cover."
+  description="API security intelligence — threat detection, compliance reporting, shadow API discovery, and security posture scoring for your entire API estate."
 >
   <Navbar />
   <main>
@@ -167,27 +129,36 @@ const faqSchema = {
           <Badge class="mb-6">G8Shield &middot; Coming Soon</Badge>
 
           <h1 class="text-4xl font-bold tracking-tight text-white sm:text-6xl lg:text-7xl">
-            Kong Guards the Door.
-            <br />
-            <span class="text-gradient">G8Shield Watches Inside.</span>
+            API Security
+            <span class="text-gradient">Intelligence</span>
           </h1>
 
           <p class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-slate-400">
-            Your APIs are under attack. Kong stops the obvious threats — but shadow APIs, slow attacks,
-            data leaks, and compliance gaps are invisible at the request level.
-            <strong class="text-white">G8Shield sees what Kong can't.</strong>
+            Discover shadow APIs, detect slow attacks, prevent data leaks, and prove compliance — continuously.
+            <strong class="text-white">G8Shield protects your entire API estate from threats you can't see at the request level.</strong>
           </p>
 
-          <div class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Button href="mailto:hello@g8stack.com?subject=G8Shield%20Early%20Access" size="lg">
-              Join the Waitlist
-              <svg class="ml-2 h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
-            </Button>
-            <Button href="#the-problem" variant="secondary" size="lg">
-              See the Problem
-            </Button>
+          <form id="hero-waitlist" class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 max-w-md mx-auto">
+            <input
+              type="email"
+              name="email"
+              required
+              placeholder="Enter your email"
+              class="w-full sm:flex-1 px-5 py-3.5 rounded-lg bg-white/5 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-colors"
+            />
+            <button
+              type="submit"
+              class="w-full sm:w-auto shrink-0 px-6 py-3.5 rounded-lg bg-gradient-to-r from-blue-500 to-violet-500 text-white text-sm font-semibold hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300 cursor-pointer"
+            >
+              Join Waitlist
+            </button>
+          </form>
+          <p id="hero-waitlist-msg" class="mt-3 text-sm text-emerald-400 hidden"></p>
+
+          <div class="mt-4">
+            <a href="#the-problem" class="text-sm text-slate-500 hover:text-slate-300 transition-colors">
+              See what G8Shield solves &darr;
+            </a>
           </div>
         </div>
       </Container>
@@ -217,66 +188,141 @@ const faqSchema = {
       </Container>
     </section>
 
-    {/* ===== The Problems ===== */}
+    {/* ===== The Problems G8Shield Solves ===== */}
     <section id="the-problem" class="border-t border-white/5 py-20 sm:py-32">
       <Container>
         <SectionHeading
-          label="The Problem"
-          title='Six Threats Kong <span class="text-gradient">Cannot See</span>'
-          description="These aren't hypothetical. They're happening to API-first companies right now. Kong handles per-request security — but these threats exist between requests, across endpoints, and over time."
+          label="Why G8Shield"
+          title='Six Threats <span class="text-gradient">G8Shield Stops</span>'
+          description="These aren't hypothetical. They're happening to API-first companies right now — threats that exist between requests, across endpoints, and over time."
         />
 
-        <div class="space-y-8">
-          {problems.map((p, i) => (
-            <div class="glass-card rounded-2xl overflow-hidden" data-aos="fade-up" data-aos-delay={i * 50}>
-              <div class:list={["flex items-center gap-4 px-8 py-5 border-b border-white/5", p.color.split(' ')[0]]}>
-                <div class:list={["shrink-0 w-10 h-10 rounded-lg flex items-center justify-center", p.color]}>
-                  <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d={p.icon} />
-                  </svg>
-                </div>
-                <h3 class="text-lg font-bold text-white">{p.problem}</h3>
-              </div>
+        <div id="threat-tabs" data-aos="fade-up" data-aos-delay="100">
+          {/* Mobile: horizontal scrollable tabs */}
+          <div class="flex lg:hidden gap-2 overflow-x-auto pb-4 mb-6 scrollbar-hide">
+            {problems.map((p, i) => (
+              <button
+                data-tab-btn={i}
+                class:list={[
+                  "threat-tab-btn flex items-center gap-2 shrink-0 rounded-lg px-4 py-3 text-sm font-medium transition-all duration-200 cursor-pointer",
+                  i === 0 ? "bg-white/10 text-white" : "text-slate-500 hover:text-slate-300 hover:bg-white/5",
+                ]}
+              >
+                <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d={p.icon} />
+                </svg>
+                <span class="whitespace-nowrap">{p.problem.split(' — ')[0]}</span>
+              </button>
+            ))}
+          </div>
 
-              <div class="grid md:grid-cols-2 gap-px bg-white/5">
-                <div class="bg-navy-950 p-8">
-                  <div class="mb-4">
-                    <span class="inline-block px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-rose-400 bg-rose-500/10 rounded">Scenario</span>
+          {/* Desktop: vertical tabs layout */}
+          <div class="flex flex-col lg:flex-row gap-6">
+            {/* Vertical tab buttons */}
+            <div class="hidden lg:flex flex-col gap-1 w-72 shrink-0">
+              {problems.map((p, i) => (
+                <button
+                  data-tab-btn={i}
+                  class:list={[
+                    "threat-tab-btn flex items-center gap-3 rounded-xl px-5 py-4 text-left transition-all duration-200 cursor-pointer",
+                    i === 0
+                      ? "bg-white/10 border border-white/10 text-white"
+                      : "text-slate-500 hover:text-slate-300 hover:bg-white/5 border border-transparent",
+                  ]}
+                >
+                  <div class:list={["shrink-0 w-9 h-9 rounded-lg flex items-center justify-center", p.color]}>
+                    <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d={p.icon} />
+                    </svg>
                   </div>
-                  <p class="text-sm text-slate-300 leading-relaxed">{p.scenario}</p>
-                </div>
-                <div class="bg-navy-950 p-8">
-                  <div class="mb-4">
-                    <span class="inline-block px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-amber-400 bg-amber-500/10 rounded">Root Cause</span>
-                  </div>
-                  <p class="text-sm text-slate-300 leading-relaxed">{p.cause}</p>
-                </div>
-                <div class="bg-navy-950 p-8">
-                  <div class="mb-4">
-                    <span class="inline-block px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-red-400 bg-red-500/10 rounded">Impact</span>
-                  </div>
-                  <p class="text-sm text-slate-300 leading-relaxed">{p.impact}</p>
-                </div>
-                <div class="bg-navy-950 p-8">
-                  <div class="mb-4">
-                    <span class="inline-block px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-emerald-400 bg-emerald-500/10 rounded">G8Shield Solution</span>
-                  </div>
-                  <p class="text-sm text-slate-300 leading-relaxed">{p.solution}</p>
-                </div>
-              </div>
+                  <span class="text-sm font-medium leading-tight">{p.problem.split(' — ')[0]}</span>
+                </button>
+              ))}
             </div>
-          ))}
+
+            {/* Tab content panels */}
+            <div class="flex-1 min-w-0">
+              {problems.map((p, i) => (
+                <div
+                  data-tab-panel={i}
+                  class:list={["threat-tab-panel", i === 0 ? "" : "hidden"]}
+                >
+                  <div class="glass-card rounded-2xl overflow-hidden">
+                    <div class:list={["flex items-center gap-4 px-8 py-5 border-b border-white/5", p.color.split(' ')[0]]}>
+                      <div class:list={["shrink-0 w-10 h-10 rounded-lg flex items-center justify-center", p.color]}>
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" d={p.icon} />
+                        </svg>
+                      </div>
+                      <div>
+                        <h3 class="text-lg font-bold text-white">{p.problem}</h3>
+                      </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-px bg-white/5">
+                      <div class="bg-navy-950 p-6 sm:p-8">
+                        <span class="inline-block px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-rose-400 bg-rose-500/10 rounded mb-3">Scenario</span>
+                        <p class="text-sm text-slate-300 leading-relaxed">{p.scenario}</p>
+                      </div>
+                      <div class="bg-navy-950 p-6 sm:p-8">
+                        <span class="inline-block px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-amber-400 bg-amber-500/10 rounded mb-3">Root Cause</span>
+                        <p class="text-sm text-slate-300 leading-relaxed">{p.cause}</p>
+                      </div>
+                      <div class="bg-navy-950 p-6 sm:p-8">
+                        <span class="inline-block px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-red-400 bg-red-500/10 rounded mb-3">Impact</span>
+                        <p class="text-sm text-slate-300 leading-relaxed">{p.impact}</p>
+                      </div>
+                      <div class="bg-navy-950 p-6 sm:p-8">
+                        <span class="inline-block px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-emerald-400 bg-emerald-500/10 rounded mb-3">G8Shield Solution</span>
+                        <p class="text-sm text-slate-300 leading-relaxed">{p.solution}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </Container>
     </section>
+
+    <script>
+      const tabBtns = document.querySelectorAll('.threat-tab-btn');
+      const tabPanels = document.querySelectorAll('.threat-tab-panel');
+
+      tabBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const idx = btn.getAttribute('data-tab-btn');
+
+          // Reset all buttons
+          tabBtns.forEach((b) => {
+            b.classList.remove('bg-white/10', 'border-white/10', 'text-white');
+            b.classList.add('text-slate-500', 'border-transparent');
+          });
+
+          // Activate clicked button
+          btn.classList.add('bg-white/10', 'border-white/10', 'text-white');
+          btn.classList.remove('text-slate-500', 'border-transparent');
+
+          // Show matching panel, hide others
+          tabPanels.forEach((panel) => {
+            if (panel.getAttribute('data-tab-panel') === idx) {
+              panel.classList.remove('hidden');
+            } else {
+              panel.classList.add('hidden');
+            }
+          });
+        });
+      });
+    </script>
 
     {/* ===== How It Works ===== */}
     <section id="how-it-works" class="border-t border-white/5 py-20 sm:py-32">
       <Container>
         <SectionHeading
           label="Architecture"
-          title='Not a Plugin. A <span class="text-gradient">Security Brain</span>.'
-          description="G8Shield is a standalone application — not a Kong plugin. It sits alongside your existing stack, reads traffic data, analyses patterns, and acts through Kong's Admin API."
+          title='A Standalone <span class="text-gradient">Security Brain</span>'
+          description="G8Shield is a standalone application that sits alongside your existing stack. It reads traffic data, analyses patterns, and enforces security policies automatically."
         />
 
         <div class="max-w-3xl mx-auto space-y-6" data-aos="fade-up" data-aos-delay="100">
@@ -310,9 +356,9 @@ const faqSchema = {
         <div class="mt-12 max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="200">
           <div class="glass-card rounded-xl p-6">
             <p class="text-sm text-slate-400 leading-relaxed">
-              <strong class="text-white">Why not a Kong plugin?</strong> Kong plugins process one request at a time.
+              <strong class="text-white">Why a standalone app?</strong> Gateway plugins process one request at a time.
               Credential stuffing needs request correlation. Shadow API discovery needs traffic analysis.
-              Compliance reporting needs historical data. These require a separate engine with its own data store —
+              Compliance reporting needs historical data. These require a dedicated engine with its own data store —
               not a per-request filter.
             </p>
           </div>
@@ -320,31 +366,182 @@ const faqSchema = {
       </Container>
     </section>
 
-    {/* ===== Who Buys This ===== */}
-    <section id="who-buys" class="py-20 sm:py-32">
+    {/* ===== Why G8Shield ===== */}
+    <section id="why-g8shield" class="py-20 sm:py-32">
       <Container>
         <SectionHeading
-          label="Who Needs This"
-          title='Who Buys <span class="text-gradient">G8Shield</span>'
-          description="These are the clients who feel the pain today — and the trigger that makes them pick up the phone."
+          label="Why G8Shield"
+          title='Why You Should Use <span class="text-gradient">G8Shield</span>'
+          description="APIs are the backbone of your business. G8Shield ensures they stay secure, compliant, and visible."
         />
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" data-aos="fade-up" data-aos-delay="100">
-          {clients.map((c) => (
-            <div class="glass-card rounded-xl p-8 transition-all duration-300">
-              <div class="mb-4 inline-flex rounded-lg p-3 bg-blue-500/10 text-blue-400">
-                <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" d={c.icon} />
+        <div id="why-tabs" data-aos="fade-up" data-aos-delay="100">
+          {/* Mobile: horizontal scrollable tabs */}
+          <div class="flex lg:hidden gap-2 overflow-x-auto pb-4 mb-6 scrollbar-hide">
+            {[
+              { label: "API Discovery", icon: "M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" },
+              { label: "Attack Detection", icon: "M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" },
+              { label: "Data Protection", icon: "M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178zM15 12a3 3 0 11-6 0 3 3 0 016 0z" },
+              { label: "Compliance", icon: "M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25" },
+              { label: "Posture Scoring", icon: "M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" },
+              { label: "Correlation", icon: "M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" },
+            ].map((tab, i) => (
+              <button
+                data-why-btn={i}
+                class:list={[
+                  "why-tab-btn flex items-center gap-2 shrink-0 rounded-lg px-4 py-3 text-sm font-medium transition-all duration-200 cursor-pointer",
+                  i === 0 ? "bg-white/10 text-white" : "text-slate-500 hover:text-slate-300 hover:bg-white/5",
+                ]}
+              >
+                <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d={tab.icon} />
                 </svg>
-              </div>
-              <h3 class="text-lg font-semibold text-white mb-1">{c.type}</h3>
-              <p class="text-xs text-violet-400 font-medium mb-3">Trigger: {c.trigger}</p>
-              <p class="text-sm text-slate-400">{c.needs}</p>
+                <span class="whitespace-nowrap">{tab.label}</span>
+              </button>
+            ))}
+          </div>
+
+          {/* Desktop: vertical tabs layout */}
+          <div class="flex flex-col lg:flex-row gap-6">
+            <div class="hidden lg:flex flex-col gap-1 w-64 shrink-0">
+              {[
+                { label: "See Every API You Have", color: "bg-rose-500/10 text-rose-400", icon: "M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" },
+                { label: "Catch Attacks Early", color: "bg-amber-500/10 text-amber-400", icon: "M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" },
+                { label: "Stop Data Leaks", color: "bg-violet-500/10 text-violet-400", icon: "M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178zM15 12a3 3 0 11-6 0 3 3 0 016 0z" },
+                { label: "Pass Audits Easily", color: "bg-blue-500/10 text-blue-400", icon: "M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25" },
+                { label: "Know Your Posture", color: "bg-blue-500/10 text-blue-400", icon: "M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" },
+                { label: "Connect the Dots", color: "bg-rose-500/10 text-rose-400", icon: "M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" },
+              ].map((tab, i) => (
+                <button
+                  data-why-btn={i}
+                  class:list={[
+                    "why-tab-btn flex items-center gap-3 rounded-xl px-5 py-4 text-left transition-all duration-200 cursor-pointer",
+                    i === 0
+                      ? "bg-white/10 border border-white/10 text-white"
+                      : "text-slate-500 hover:text-slate-300 hover:bg-white/5 border border-transparent",
+                  ]}
+                >
+                  <div class:list={["shrink-0 w-9 h-9 rounded-lg flex items-center justify-center", tab.color]}>
+                    <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d={tab.icon} />
+                    </svg>
+                  </div>
+                  <span class="text-sm font-medium leading-tight">{tab.label}</span>
+                </button>
+              ))}
             </div>
-          ))}
+
+            {/* Tab content panels */}
+            <div class="flex-1 min-w-0">
+              <div data-why-panel="0" class="why-tab-panel">
+                <div class="glass-card rounded-2xl p-8 sm:p-10">
+                  <h3 class="text-xl font-bold text-white mb-4">See Every API You Have</h3>
+                  <p class="text-slate-400 leading-relaxed mb-6">You can't protect what you can't see. G8Shield discovers every API in your environment — documented or not — so nothing hides in the shadows.</p>
+                  <ul class="space-y-3">
+                    <li class="flex items-start gap-3"><svg class="mt-0.5 h-5 w-5 shrink-0 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg><span class="text-sm text-slate-300">Passive traffic analysis discovers all endpoints</span></li>
+                    <li class="flex items-start gap-3"><svg class="mt-0.5 h-5 w-5 shrink-0 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg><span class="text-sm text-slate-300">Maps observed endpoints against registered inventory</span></li>
+                    <li class="flex items-start gap-3"><svg class="mt-0.5 h-5 w-5 shrink-0 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg><span class="text-sm text-slate-300">Flags unregistered shadow APIs with risk scores</span></li>
+                    <li class="flex items-start gap-3"><svg class="mt-0.5 h-5 w-5 shrink-0 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg><span class="text-sm text-slate-300">Complete API inventory always up-to-date</span></li>
+                  </ul>
+                </div>
+              </div>
+
+              <div data-why-panel="1" class="why-tab-panel hidden">
+                <div class="glass-card rounded-2xl p-8 sm:p-10">
+                  <h3 class="text-xl font-bold text-white mb-4">Catch Attacks Before Damage</h3>
+                  <p class="text-slate-400 leading-relaxed mb-6">Detect credential stuffing, scraping, and business logic abuse by correlating patterns across requests — not just checking one request at a time.</p>
+                  <ul class="space-y-3">
+                    <li class="flex items-start gap-3"><svg class="mt-0.5 h-5 w-5 shrink-0 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg><span class="text-sm text-slate-300">Behavioural analysis across requests, endpoints, and time</span></li>
+                    <li class="flex items-start gap-3"><svg class="mt-0.5 h-5 w-5 shrink-0 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg><span class="text-sm text-slate-300">Detects low-and-slow attacks that bypass rate limits</span></li>
+                    <li class="flex items-start gap-3"><svg class="mt-0.5 h-5 w-5 shrink-0 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg><span class="text-sm text-slate-300">Automated blocking and rate limiting response</span></li>
+                    <li class="flex items-start gap-3"><svg class="mt-0.5 h-5 w-5 shrink-0 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg><span class="text-sm text-slate-300">Alert before damage, not after the breach report</span></li>
+                  </ul>
+                </div>
+              </div>
+
+              <div data-why-panel="2" class="why-tab-panel hidden">
+                <div class="glass-card rounded-2xl p-8 sm:p-10">
+                  <h3 class="text-xl font-bold text-white mb-4">Stop Data Leaks Instantly</h3>
+                  <p class="text-slate-400 leading-relaxed mb-6">Real-time response body scanning for PII, credentials, and tokens. Get alerted the moment sensitive data leaks through an API — not weeks later.</p>
+                  <ul class="space-y-3">
+                    <li class="flex items-start gap-3"><svg class="mt-0.5 h-5 w-5 shrink-0 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg><span class="text-sm text-slate-300">Scans response bodies for IC numbers, credit cards, passwords</span></li>
+                    <li class="flex items-start gap-3"><svg class="mt-0.5 h-5 w-5 shrink-0 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg><span class="text-sm text-slate-300">Malaysian context — NRIC, phone (+60), bank account patterns</span></li>
+                    <li class="flex items-start gap-3"><svg class="mt-0.5 h-5 w-5 shrink-0 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg><span class="text-sm text-slate-300">Instant alerts with option to auto-block the endpoint</span></li>
+                    <li class="flex items-start gap-3"><svg class="mt-0.5 h-5 w-5 shrink-0 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg><span class="text-sm text-slate-300">Prevents PDPA and GDPR violations before they happen</span></li>
+                  </ul>
+                </div>
+              </div>
+
+              <div data-why-panel="3" class="why-tab-panel hidden">
+                <div class="glass-card rounded-2xl p-8 sm:p-10">
+                  <h3 class="text-xl font-bold text-white mb-4">Pass Audits Without Panic</h3>
+                  <p class="text-slate-400 leading-relaxed mb-6">Continuous compliance monitoring against PCI-DSS, GDPR, SOC2, and PDPA. Auditor-ready reports generated automatically — no more 3-week scrambles.</p>
+                  <ul class="space-y-3">
+                    <li class="flex items-start gap-3"><svg class="mt-0.5 h-5 w-5 shrink-0 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg><span class="text-sm text-slate-300">Maps API security to PCI-DSS, GDPR, SOC2, PDPA controls</span></li>
+                    <li class="flex items-start gap-3"><svg class="mt-0.5 h-5 w-5 shrink-0 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg><span class="text-sm text-slate-300">Configuration drift detection with real-time alerts</span></li>
+                    <li class="flex items-start gap-3"><svg class="mt-0.5 h-5 w-5 shrink-0 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg><span class="text-sm text-slate-300">Auditor-ready PDF reports with evidence trail</span></li>
+                    <li class="flex items-start gap-3"><svg class="mt-0.5 h-5 w-5 shrink-0 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg><span class="text-sm text-slate-300">Living evidence — always current, not point-in-time snapshots</span></li>
+                  </ul>
+                </div>
+              </div>
+
+              <div data-why-panel="4" class="why-tab-panel hidden">
+                <div class="glass-card rounded-2xl p-8 sm:p-10">
+                  <h3 class="text-xl font-bold text-white mb-4">Know Your Security Posture</h3>
+                  <p class="text-slate-400 leading-relaxed mb-6">A single risk score for every API, every service, your entire organisation. Track trends over time and answer "how secure are we?" with data, not guesswork.</p>
+                  <ul class="space-y-3">
+                    <li class="flex items-start gap-3"><svg class="mt-0.5 h-5 w-5 shrink-0 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg><span class="text-sm text-slate-300">Per-API, per-service, and org-wide risk scores (0-100)</span></li>
+                    <li class="flex items-start gap-3"><svg class="mt-0.5 h-5 w-5 shrink-0 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg><span class="text-sm text-slate-300">Weighted scoring — auth, data sensitivity, compliance, anomalies</span></li>
+                    <li class="flex items-start gap-3"><svg class="mt-0.5 h-5 w-5 shrink-0 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg><span class="text-sm text-slate-300">Trend tracking — compare this month vs last quarter</span></li>
+                    <li class="flex items-start gap-3"><svg class="mt-0.5 h-5 w-5 shrink-0 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg><span class="text-sm text-slate-300">Executive summary for leadership and board reporting</span></li>
+                  </ul>
+                </div>
+              </div>
+
+              <div data-why-panel="5" class="why-tab-panel hidden">
+                <div class="glass-card rounded-2xl p-8 sm:p-10">
+                  <h3 class="text-xl font-bold text-white mb-4">Connect the Dots</h3>
+                  <p class="text-slate-400 leading-relaxed mb-6">Turn thousands of isolated log lines into a single attack narrative. G8Shield correlates events across IPs, endpoints, and time — so your team sees the full picture.</p>
+                  <ul class="space-y-3">
+                    <li class="flex items-start gap-3"><svg class="mt-0.5 h-5 w-5 shrink-0 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg><span class="text-sm text-slate-300">Groups related events into incidents with timeline view</span></li>
+                    <li class="flex items-start gap-3"><svg class="mt-0.5 h-5 w-5 shrink-0 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg><span class="text-sm text-slate-300">Correlates across IPs, API keys, endpoints, and time</span></li>
+                    <li class="flex items-start gap-3"><svg class="mt-0.5 h-5 w-5 shrink-0 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg><span class="text-sm text-slate-300">Severity classification for prioritised response</span></li>
+                    <li class="flex items-start gap-3"><svg class="mt-0.5 h-5 w-5 shrink-0 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg><span class="text-sm text-slate-300">SIEM integration with enriched, security-specific events</span></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </Container>
     </section>
+
+    <script>
+      const whyBtns = document.querySelectorAll('.why-tab-btn');
+      const whyPanels = document.querySelectorAll('.why-tab-panel');
+
+      whyBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const idx = btn.getAttribute('data-why-btn');
+
+          whyBtns.forEach((b) => {
+            b.classList.remove('bg-white/10', 'border-white/10', 'text-white');
+            b.classList.add('text-slate-500', 'border-transparent');
+          });
+
+          btn.classList.add('bg-white/10', 'border-white/10', 'text-white');
+          btn.classList.remove('text-slate-500', 'border-transparent');
+
+          whyPanels.forEach((panel) => {
+            if (panel.getAttribute('data-why-panel') === idx) {
+              panel.classList.remove('hidden');
+            } else {
+              panel.classList.add('hidden');
+            }
+          });
+        });
+      });
+    </script>
 
     {/* ===== The Pitch ===== */}
     <section class="border-t border-white/5 py-20 sm:py-32 relative">
@@ -356,10 +553,10 @@ const faqSchema = {
             </svg>
           </div>
           <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-            You secured the front door with Kong.
+            Your APIs Deserve More Than a Gatekeeper.
           </h2>
           <p class="mx-auto mt-6 max-w-xl text-xl text-slate-300 font-medium">
-            G8Shield tells you who's already inside, what they're touching, and whether you'd pass an audit today.
+            G8Shield gives you full visibility — who's accessing your APIs, what data is exposed, and whether you'd pass an audit today.
           </p>
         </div>
       </Container>
@@ -404,21 +601,50 @@ const faqSchema = {
           <p class="mx-auto mt-6 max-w-xl text-lg text-slate-400">
             G8Shield is currently in development. Join the waitlist for early access, or contact us to discuss your API security challenges.
           </p>
-          <div class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Button href="mailto:hello@g8stack.com?subject=G8Shield%20Early%20Access" size="lg">
-              Join the Waitlist
-              <svg class="ml-2 h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
-            </Button>
-            <Button href="/products/connect" variant="secondary" size="lg">
-              Explore G8Connect
-            </Button>
-          </div>
+          <form id="cta-waitlist" class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 max-w-md mx-auto">
+            <input
+              type="email"
+              name="email"
+              required
+              placeholder="Enter your email"
+              class="w-full sm:flex-1 px-5 py-3.5 rounded-lg bg-white/5 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-colors"
+            />
+            <button
+              type="submit"
+              class="w-full sm:w-auto shrink-0 px-6 py-3.5 rounded-lg bg-gradient-to-r from-blue-500 to-violet-500 text-white text-sm font-semibold hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300 cursor-pointer"
+            >
+              Join Waitlist
+            </button>
+          </form>
+          <p id="cta-waitlist-msg" class="mt-3 text-sm text-emerald-400 hidden"></p>
         </div>
       </Container>
       <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-rose-500/5 rounded-full blur-3xl -z-10"></div>
     </section>
+
+    <div id="waitlist-config" data-email={site.contactEmail} class="hidden"></div>
+    <script>
+      const contactEmail = document.getElementById('waitlist-config')?.getAttribute('data-email') || 'hello@devhub.my';
+
+      function handleWaitlist(formId: string, msgId: string) {
+        const form = document.getElementById(formId) as HTMLFormElement;
+        const msg = document.getElementById(msgId);
+        form?.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const email = new FormData(form).get('email') as string;
+          if (email) {
+            window.location.href = `mailto:${contactEmail}?subject=G8Shield%20Waitlist&body=Hi%2C%20I%27d%20like%20to%20join%20the%20G8Shield%20waitlist.%0A%0AEmail%3A%20${encodeURIComponent(email)}`;
+            if (msg) {
+              msg.textContent = `Thanks! We'll reach out to ${email} when G8Shield is ready.`;
+              msg.classList.remove('hidden');
+            }
+            form.reset();
+          }
+        });
+      }
+      handleWaitlist('hero-waitlist', 'hero-waitlist-msg');
+      handleWaitlist('cta-waitlist', 'cta-waitlist-msg');
+    </script>
 
   </main>
   <Footer />

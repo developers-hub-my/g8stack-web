@@ -2,21 +2,42 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Container from "../components/ui/Container.astro";
 import Button from "../components/ui/Button.astro";
+import Navbar from "../components/Navbar.astro";
+import Footer from "../components/Footer.astro";
+import "../styles/global.css";
 ---
 
 <BaseLayout title="Page Not Found — G8Stack" description="The page you're looking for doesn't exist.">
-  <Container>
-    <div class="min-h-screen flex items-center justify-center">
-      <div class="text-center max-w-md">
-        <p class="text-7xl font-extrabold text-gradient mb-4">404</p>
-        <h1 class="text-2xl font-bold text-white mb-4">Page not found</h1>
-        <p class="text-slate-400 mb-8">
-          The page you're looking for doesn't exist or has been moved.
-        </p>
-        <Button href="/" variant="primary" size="lg">
-          Back to Home
-        </Button>
+  <Navbar />
+  <main>
+    <section class="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
+      <Container>
+        <div class="text-center max-w-lg mx-auto" data-aos="fade-up">
+          <p class="text-[120px] sm:text-[160px] font-extrabold leading-none text-gradient mb-2">404</p>
+          <h1 class="text-2xl sm:text-3xl font-bold text-white mb-4">Page not found</h1>
+          <p class="text-slate-400 mb-10 leading-relaxed">
+            The page you're looking for doesn't exist or has been moved.
+          </p>
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Button href="/" variant="primary" size="lg">
+              Back to Home
+            </Button>
+            <Button href="/products/connect" variant="secondary" size="lg">
+              Explore Products
+            </Button>
+          </div>
+        </div>
+      </Container>
+
+      <div class="absolute inset-0 -z-10 overflow-hidden">
+        <div class="absolute left-1/2 top-1/3 -translate-x-1/2 -translate-y-1/2">
+          <div class="h-[500px] w-[500px] rounded-full bg-blue-500/5 blur-3xl"></div>
+        </div>
+        <div class="absolute right-1/4 bottom-1/4">
+          <div class="h-[300px] w-[300px] rounded-full bg-violet-500/5 blur-3xl"></div>
+        </div>
       </div>
-    </div>
-  </Container>
+    </section>
+  </main>
+  <Footer />
 </BaseLayout>

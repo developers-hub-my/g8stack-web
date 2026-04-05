@@ -31,7 +31,7 @@ import { navLinks, products } from "../data/navigation";
         <div class="relative" id="products-dropdown">
           <button
             id="products-btn"
-            class="flex items-center gap-1 text-sm text-slate-400 hover:text-white transition-colors duration-200"
+            class="flex items-center gap-1 text-sm text-slate-400 hover:text-white transition-colors duration-200 cursor-pointer"
           >
             Products
             <svg class="w-4 h-4 transition-transform duration-200" id="products-chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -46,13 +46,8 @@ import { navLinks, products } from "../data/navigation";
             <div class="p-2">
               {products.map((product) => (
                 <a
-                  href={product.available ? product.href : undefined}
-                  class:list={[
-                    "flex items-start gap-3 rounded-lg p-3 transition-colors",
-                    product.available
-                      ? "hover:bg-white/5 cursor-pointer"
-                      : "opacity-50 cursor-default",
-                  ]}
+                  href={product.href}
+                  class="flex items-start gap-3 rounded-lg p-3 transition-colors hover:bg-white/5 cursor-pointer"
                 >
                   <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-blue-500/20 to-violet-500/20 flex items-center justify-center shrink-0 mt-0.5">
                     <img src={product.logo} alt={product.name} class="w-5 h-5" />
@@ -76,7 +71,7 @@ import { navLinks, products } from "../data/navigation";
       <!-- CTA -->
       <div class="hidden lg:flex items-center gap-4">
         <a
-          href="#pricing"
+          href="/#pricing"
           class="inline-flex items-center justify-center px-5 py-2.5 text-sm font-semibold rounded-lg bg-gradient-to-r from-blue-500 to-violet-500 text-white hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300"
         >
           Get Started
@@ -124,13 +119,8 @@ import { navLinks, products } from "../data/navigation";
         </div>
         {products.map((product) => (
           <a
-            href={product.available ? product.href : undefined}
-            class:list={[
-              "mobile-nav-link flex items-center gap-3 px-4 py-3 rounded-lg transition-colors",
-              product.available
-                ? "text-slate-400 hover:text-white hover:bg-white/5"
-                : "text-slate-600 cursor-default",
-            ]}
+            href={product.href}
+            class="mobile-nav-link flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-slate-400 hover:text-white hover:bg-white/5 cursor-pointer"
           >
             <img src={product.logo} alt={product.name} class="w-5 h-5" />
             <div>
@@ -144,7 +134,7 @@ import { navLinks, products } from "../data/navigation";
 
         <div class="px-4 pt-4">
           <a
-            href="#pricing"
+            href="/#pricing"
             class="block text-center px-5 py-3 text-sm font-semibold rounded-lg bg-gradient-to-r from-blue-500 to-violet-500 text-white"
           >
             See It in Action

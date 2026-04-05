@@ -3,82 +3,168 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import Container from "../components/ui/Container.astro";
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
+import { site } from "../data/site";
+import "../styles/global.css";
 ---
 
-<BaseLayout title="Terms of Service — G8Stack" description="G8Stack terms of service. Read our terms and conditions for using the G8Stack platform.">
+<BaseLayout title="Terms of Service — G8Stack" description="G8Stack terms of service. Read our terms and conditions for using G8Stack, G8Connect, G8Shield, and G8Monitor.">
   <Navbar />
   <main class="pt-32 pb-20">
     <Container>
-      <div class="max-w-3xl mx-auto prose prose-invert prose-slate">
+      <div class="max-w-3xl mx-auto">
         <h1 class="text-4xl font-bold text-white mb-2">Terms of Service</h1>
-        <p class="text-slate-500 text-sm mb-12">Last updated: February 2026</p>
+        <p class="text-slate-500 text-sm mb-12">Last updated: April 2026</p>
 
         <section class="mb-10">
           <h2 class="text-xl font-semibold text-white mb-4">1. Agreement</h2>
           <p class="text-slate-400 leading-relaxed">
-            By accessing or using G8Stack ("the Platform"), a product of Developers Hub Sdn Bhd ("we", "our", "us"), you agree to be bound by these Terms of Service. If you do not agree, do not use the Platform.
+            By accessing or using G8Stack, G8Connect, G8Shield, G8Monitor, or any associated services (collectively "the Platform"), products of Developers Hub Sdn Bhd (Company No. 202001011498 / 1367505-A) ("we", "our", "us"), you agree to be bound by these Terms of Service. If you do not agree, do not use the Platform.
           </p>
         </section>
 
         <section class="mb-10">
-          <h2 class="text-xl font-semibold text-white mb-4">2. Use of Service</h2>
-          <p class="text-slate-400 leading-relaxed mb-4">You agree to:</p>
+          <h2 class="text-xl font-semibold text-white mb-4">2. Definitions</h2>
           <ul class="list-disc list-inside text-slate-400 space-y-2">
-            <li>Use the Platform only for lawful purposes and in accordance with these Terms</li>
-            <li>Maintain the security of your account credentials</li>
-            <li>Not attempt to reverse-engineer, decompile, or disassemble the Platform</li>
-            <li>Not use the Platform to transmit harmful code or interfere with its operation</li>
+            <li><strong class="text-slate-300">"G8Stack"</strong> — The API gateway management and governance platform.</li>
+            <li><strong class="text-slate-300">"G8Connect"</strong> — The data source to API generation product, available under the MIT open source licence.</li>
+            <li><strong class="text-slate-300">"G8Shield"</strong> — The API security intelligence and compliance product.</li>
+            <li><strong class="text-slate-300">"G8Monitor"</strong> — The API observability product powered by Elastic Stack.</li>
+            <li><strong class="text-slate-300">"User"</strong> — Any individual or organisation that accesses or uses the Platform.</li>
+            <li><strong class="text-slate-300">"Enterprise Customer"</strong> — A User with a paid enterprise agreement.</li>
           </ul>
         </section>
 
         <section class="mb-10">
-          <h2 class="text-xl font-semibold text-white mb-4">3. Accounts</h2>
-          <p class="text-slate-400 leading-relaxed">
+          <h2 class="text-xl font-semibold text-white mb-4">3. Use of Service</h2>
+          <p class="text-slate-400 leading-relaxed mb-4">You agree to:</p>
+          <ul class="list-disc list-inside text-slate-400 space-y-2">
+            <li>Use the Platform only for lawful purposes and in accordance with these Terms</li>
+            <li>Maintain the security and confidentiality of your account credentials</li>
+            <li>Not attempt to reverse-engineer, decompile, or disassemble any proprietary components of the Platform</li>
+            <li>Not use the Platform to transmit harmful code, malware, or interfere with its operation</li>
+            <li>Not use the Platform to access, store, or process data in violation of any applicable laws or regulations</li>
+            <li>Comply with all applicable laws, including data protection regulations (PDPA, GDPR) when processing data through the Platform</li>
+          </ul>
+        </section>
+
+        <section class="mb-10">
+          <h2 class="text-xl font-semibold text-white mb-4">4. Accounts & Access</h2>
+          <p class="text-slate-400 leading-relaxed mb-4">
             You are responsible for maintaining the confidentiality of your account and password. You agree to accept responsibility for all activities that occur under your account.
           </p>
-        </section>
-
-        <section class="mb-10">
-          <h2 class="text-xl font-semibold text-white mb-4">4. Intellectual Property</h2>
           <p class="text-slate-400 leading-relaxed">
-            The Platform and its original content, features, and functionality are owned by Developers Hub Sdn Bhd and are protected by international copyright, trademark, and other intellectual property laws.
+            The Platform uses role-based access control (RBAC). Administrators are responsible for assigning appropriate roles (superadmin, administrator, developer, viewer) to their team members. Access privileges should follow the principle of least privilege.
           </p>
         </section>
 
         <section class="mb-10">
-          <h2 class="text-xl font-semibold text-white mb-4">5. Payment & Billing</h2>
+          <h2 class="text-xl font-semibold text-white mb-4">5. Open Source Components</h2>
+          <p class="text-slate-400 leading-relaxed mb-4">
+            G8Connect is released under the MIT License. You may use, modify, and distribute it in accordance with the MIT License terms. The MIT License applies only to G8Connect — other G8Stack products are proprietary.
+          </p>
           <p class="text-slate-400 leading-relaxed">
-            Pricing is determined on a per-organization basis. Payment terms will be outlined in your individual service agreement. All fees are non-refundable unless otherwise stated.
+            The Platform may include third-party open source components, each subject to their own licence terms. A list of third-party licences is available in the respective product repositories.
           </p>
         </section>
 
         <section class="mb-10">
-          <h2 class="text-xl font-semibold text-white mb-4">6. Limitation of Liability</h2>
+          <h2 class="text-xl font-semibold text-white mb-4">6. Data Source Connections (G8Connect)</h2>
+          <p class="text-slate-400 leading-relaxed mb-4">
+            When you connect a data source through G8Connect:
+          </p>
+          <ul class="list-disc list-inside text-slate-400 space-y-2">
+            <li>Your database credentials are encrypted at rest and never logged or stored in plaintext</li>
+            <li>Connections are enforced as read-only at the connector level — G8Connect never writes to your databases</li>
+            <li>Schema introspection data is cached locally and subject to your data retention settings</li>
+            <li>Generated API specifications are stored within your G8Stack instance and subject to your governance policies</li>
+            <li>You are responsible for ensuring you have appropriate authorisation to connect and introspect data sources</li>
+          </ul>
+        </section>
+
+        <section class="mb-10">
+          <h2 class="text-xl font-semibold text-white mb-4">7. Security Intelligence (G8Shield)</h2>
+          <p class="text-slate-400 leading-relaxed mb-4">
+            When you use G8Shield:
+          </p>
+          <ul class="list-disc list-inside text-slate-400 space-y-2">
+            <li>G8Shield analyses API traffic metadata for security threat detection — it does not intercept or modify live API traffic</li>
+            <li>Automated enforcement actions (IP blocking, rate limiting, endpoint disabling) are configurable — you control which actions are automated and which require manual approval</li>
+            <li>Compliance reports are generated based on configuration analysis and do not constitute legal compliance certification</li>
+            <li>G8Shield is an advisory tool — you remain responsible for your organisation's security posture and compliance obligations</li>
+          </ul>
+        </section>
+
+        <section class="mb-10">
+          <h2 class="text-xl font-semibold text-white mb-4">8. Intellectual Property</h2>
+          <p class="text-slate-400 leading-relaxed mb-4">
+            The Platform (excluding open source components) and its original content, features, branding, and functionality are owned by Developers Hub Sdn Bhd and are protected by international copyright, trademark, and other intellectual property laws.
+          </p>
           <p class="text-slate-400 leading-relaxed">
-            To the maximum extent permitted by law, Developers Hub Sdn Bhd shall not be liable for any indirect, incidental, special, or consequential damages resulting from the use or inability to use the Platform.
+            Your data remains yours. We do not claim ownership of any data you process through the Platform, including database schemas, API specifications, traffic logs, or security reports.
           </p>
         </section>
 
         <section class="mb-10">
-          <h2 class="text-xl font-semibold text-white mb-4">7. Termination</h2>
+          <h2 class="text-xl font-semibold text-white mb-4">9. Payment & Billing</h2>
+          <p class="text-slate-400 leading-relaxed mb-4">
+            Open source products (G8Connect) are free to use. Enterprise features, dedicated support, and managed services are subject to individual pricing agreements.
+          </p>
+          <ul class="list-disc list-inside text-slate-400 space-y-2">
+            <li>Enterprise pricing is determined on a per-organisation basis</li>
+            <li>Payment terms are outlined in your individual service agreement</li>
+            <li>All fees are non-refundable unless otherwise stated in your service agreement</li>
+            <li>We reserve the right to modify pricing with 30 days' written notice</li>
+          </ul>
+        </section>
+
+        <section class="mb-10">
+          <h2 class="text-xl font-semibold text-white mb-4">10. Service Availability</h2>
           <p class="text-slate-400 leading-relaxed">
+            We strive for high availability but do not guarantee uninterrupted access to the Platform. Scheduled maintenance will be communicated in advance. Enterprise customers may have specific SLA terms defined in their service agreement.
+          </p>
+        </section>
+
+        <section class="mb-10">
+          <h2 class="text-xl font-semibold text-white mb-4">11. Limitation of Liability</h2>
+          <p class="text-slate-400 leading-relaxed">
+            To the maximum extent permitted by Malaysian law, Developers Hub Sdn Bhd shall not be liable for any indirect, incidental, special, consequential, or punitive damages resulting from the use or inability to use the Platform, including but not limited to data loss, security incidents, or business interruption.
+          </p>
+        </section>
+
+        <section class="mb-10">
+          <h2 class="text-xl font-semibold text-white mb-4">12. Termination</h2>
+          <p class="text-slate-400 leading-relaxed mb-4">
             We may terminate or suspend your access to the Platform at our sole discretion, without prior notice, for conduct that we believe violates these Terms or is harmful to other users or the Platform.
           </p>
-        </section>
-
-        <section class="mb-10">
-          <h2 class="text-xl font-semibold text-white mb-4">8. Changes to Terms</h2>
           <p class="text-slate-400 leading-relaxed">
-            We reserve the right to modify these Terms at any time. Changes will be posted on this page with an updated revision date. Continued use of the Platform constitutes acceptance of the revised Terms.
+            Upon termination, your right to use the Platform ceases immediately. You may request export of your data within 30 days of termination. After this period, your data may be permanently deleted.
           </p>
         </section>
 
         <section class="mb-10">
-          <h2 class="text-xl font-semibold text-white mb-4">9. Contact Us</h2>
+          <h2 class="text-xl font-semibold text-white mb-4">13. Governing Law</h2>
           <p class="text-slate-400 leading-relaxed">
-            If you have questions about these Terms, contact us at:<br />
-            <a href="mailto:hello@devhub.my" class="text-blue-400 hover:text-blue-300">hello@devhub.my</a>
+            These Terms shall be governed by and construed in accordance with the laws of Malaysia. Any disputes arising from these Terms shall be subject to the exclusive jurisdiction of the courts of Malaysia.
           </p>
+        </section>
+
+        <section class="mb-10">
+          <h2 class="text-xl font-semibold text-white mb-4">14. Changes to Terms</h2>
+          <p class="text-slate-400 leading-relaxed">
+            We reserve the right to modify these Terms at any time. Changes will be posted on this page with an updated revision date. Material changes will be communicated via email or a prominent notice on the Platform. Continued use of the Platform after changes constitutes acceptance of the revised Terms.
+          </p>
+        </section>
+
+        <section class="mb-10">
+          <h2 class="text-xl font-semibold text-white mb-4">15. Contact Us</h2>
+          <p class="text-slate-400 leading-relaxed">
+            If you have questions about these Terms, contact us at:
+          </p>
+          <div class="mt-4 text-slate-400">
+            <p class="font-semibold text-slate-300">Developers Hub Sdn Bhd</p>
+            <p>Email: <a href={`mailto:${site.contactEmail}`} class="text-blue-400 hover:text-blue-300">{site.contactEmail}</a></p>
+            <p>Website: <a href="https://devhub.my" class="text-blue-400 hover:text-blue-300">devhub.my</a></p>
+          </div>
         </section>
       </div>
     </Container>
