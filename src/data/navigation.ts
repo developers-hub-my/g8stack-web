@@ -27,18 +27,4 @@ export const products: Product[] = [
     logo: "/images/g8connect-logo.svg",
     available: true,
   },
-  {
-    name: "G8Shield",
-    description: "API security intelligence & compliance",
-    href: "/products/shield",
-    logo: "/images/logo.svg",
-    available: false,
-  },
-  {
-    name: "G8Monitor",
-    description: "API observability powered by Elastic Stack",
-    href: "/products/monitor",
-    logo: "/images/logo.svg",
-    available: false,
-  },
 ];
